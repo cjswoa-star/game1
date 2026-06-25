@@ -84,6 +84,14 @@
       font-weight: 1000;
     }
 
+    .one-line-title {
+      white-space: nowrap;
+      font-size: 42px;
+      letter-spacing: -0.07em;
+      text-align: center;
+      width: 100%;
+    }
+
     h1 .scribble {
       display: inline-block;
       position: relative;
@@ -496,6 +504,7 @@
     @media (max-width: 390px) {
       .card { padding: 21px; }
       h1 { font-size: 41px; }
+      .one-line-title { font-size: 35px; }
       h2 { font-size: 29px; }
       #scoreNumber { font-size: 96px; }
       .result-score { font-size: 96px; }
@@ -509,7 +518,7 @@
   <div class="app">
     <section id="startScreen" class="card">
       <div class="tag">교직원 다모임 미니게임</div>
-      <h1><span class="scribble">100점</span>에<br>멈춰라!</h1>
+      <h1 class="one-line-title"><span class="scribble">100점에 멈춰라!</span></h1>
       <p>숫자가 0점에서 100점까지 움직입니다.<br>100점에 가장 가까운 순간 버튼을 누르세요.</p>
 
       <div class="input-wrap">
