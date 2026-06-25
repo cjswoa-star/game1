@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>100점에 멈춰라! - 반복 가능 버전</title>
+  <style>
+    :root {
+      --paper: #fbf7e8;
+      --paper2: #f4ecd3;
+      --ink: #173c35;
+      --ink-soft: #41675f;
+      --line: #173c35;
+      --shadow: rgba(23, 60, 53, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(23,60,53,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23,60,53,0.035) 1px, transparent 1px),
+        radial-gradient(circle at 20% 10%, rgba(23,60,53,0.07), transparent 22%),
+        var(--paper);
+      background-size: 24px 24px, 24px 24px, auto, auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .app {
+      width: min(100%, 460px);
+    }
+
+    .card {
+      position: relative;
+      background: rgba(251,247,232,0.96);
+      border: 4px solid var(--line);
+      border-radius: 26px 32px 24px 30px;
+      padding: 25px;
+      box-shadow: 8px 8px 0 var(--shadow);
+      transform: rotate(-0.2deg);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 2px dashed rgba(23,60,53,0.28);
+      border-radius: 20px 26px 18px 24px;
+      pointer-events: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 13px;
+      border: 3px solid var(--line);
+      border-radius: 999px 900px 999px 850px;
+      background: var(--paper2);
+      font-size: 15px;
+      font-weight: 900;
+      transform: rotate(-1.4deg);
+      box-shadow: 3px 3px 0 rgba(23,60,53,0.12);
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 47px;
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      font-weight: 1000;
+    }
+
+    h1 .scribble {
+      display: inline-block;
+      position: relative;
+    }
+
+    h1 .scribble::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: -4px;
+      bottom: -6px;
+      height: 9px;
+      border-bottom: 4px solid var(--line);
+      border-radius: 50%;
+      transform: rotate(-1deg);
+      opacity: 0.8;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+      font-weight: 1000;
+    }
+
+    p {
+      margin: 13px 0 0;
+      color: var(--ink-soft);
+      font-size: 18px;
+      line-height: 1.58;
+      font-weight: 800;
+    }
+
+    .input-wrap {
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 17px;
+      font-weight: 1000;
+    }
+
+    input {
+      width: 100%;
+      height: 63px;
+      border: 4px solid var(--line);
+      border-radius: 17px 21px 16px 23px;
+      background: #fffdf4;
+      color: var(--ink);
+      padding: 0 17px;
+      font-size: 23px;
+      font-weight: 900;
+      outline: none;
+      box-shadow: 4px 4px 0 rgba(23,60,53,0.12);
+      transform: rotate(0.2deg);
+    }
+
+    input:focus {
+      background: #fffbea;
+      box-shadow: 5px 5px 0 rgba(23,60,53,0.18);
+    }
+
+    button {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 66px;
+      border: 4px solid var(--line);
+      border-radius: 22px 18px 24px 19px;
+      background: var(--ink);
+      color: var(--paper);
+      margin-top: 19px;
+      padding: 16px;
+      font-size: 29px;
+      font-weight: 1000;
+      letter-spacing: -0.04em;
+      cursor: pointer;
+      box-shadow: 6px 6px 0 rgba(23,60,53,0.18);
+      touch-action: manipulation;
+      transform: rotate(-0.3deg);
+    }
+
+    button:active {
+      transform: translate(3px, 3px) rotate(-0.3deg);
+      box-shadow: 3px 3px 0 rgba(23,60,53,0.18);
+    }
+
+    button.secondary {
+      background: var(--paper2);
+      color: var(--ink);
+    }
+
+    .rule-box {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      padding: 15px 16px;
+      border: 3px dashed var(--line);
+      border-radius: 20px 18px 21px 17px;
+      background: rgba(255,253,244,0.72);
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.65;
+      font-weight: 900;
+      transform: rotate(0.35deg);
+    }
+
+    .rule-box b {
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .name-chip,
+    .round-chip {
+      border: 3px solid var(--line);
+      background: var(--paper2);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: 16px;
+      font-weight: 1000;
+      box-shadow: 3px 3px 0 rgba(23,60,53,0.12);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .name-chip {
+      max-width: 58%;
+      transform: rotate(-1deg);
+    }
+
+    .round-chip {
+      flex-shrink: 0;
+      transform: rotate(1deg);
+    }
+
+    .target {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin: 9px 0 15px;
+      font-size: 20px;
+      font-weight: 1000;
+    }
+
+    .number-box {
+      position: relative;
+      z-index: 1;
+      background: #fffdf4;
+      border: 5px solid var(--line);
+      border-radius: 34px 28px 36px 30px;
+      padding: 25px 16px 22px;
+      text-align: center;
+      box-shadow: 7px 7px 0 rgba(23,60,53,0.12);
+      transform: rotate(0.25deg);
+      user-select: none;
+    }
+
+    .number-box::after {
+      content: "슥슥";
+      position: absolute;
+      right: 17px;
+      top: 13px;
+      font-size: 15px;
+      font-weight: 1000;
+      color: rgba(23,60,53,0.35);
+      transform: rotate(10deg);
+    }
+
+    .number-title {
+      font-size: 17px;
+      font-weight: 1000;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+
+    #scoreNumber {
+      font-size: 116px;
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: -0.08em;
+      color: var(--ink);
+      text-shadow:
+        2px 2px 0 rgba(23,60,53,0.10),
+        -1px 1px 0 rgba(23,60,53,0.08);
+    }
+
+    .meter {
+      height: 22px;
+      margin-top: 17px;
+      border: 4px solid var(--line);
+      border-radius: 999px;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          rgba(23,60,53,0.08),
+          rgba(23,60,53,0.08) 6px,
+          transparent 6px,
+          transparent 12px
+        ),
+        var(--paper2);
+      overflow: hidden;
+    }
+
+    .meter > div {
+      height: 100%;
+      width: 0%;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          rgba(251,247,232,0.18),
+          rgba(251,247,232,0.18) 5px,
+          transparent 5px,
+          transparent 10px
+        ),
+        var(--ink);
+      border-radius: 999px;
+      transition: width 0.04s linear;
+    }
+
+    .hint {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 14px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .stop-btn {
+      font-size: 36px;
+      min-height: 80px;
+      border-radius: 28px 24px 30px 22px;
+      margin-top: 20px;
+    }
+
+    .mini-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+    .mini {
+      flex: 1;
+      background: #fffdf4;
+      border: 3px solid var(--line);
+      border-radius: 20px 17px 21px 18px;
+      padding: 11px 7px 12px;
+      text-align: center;
+      box-shadow: 3px 3px 0 rgba(23,60,53,0.10);
+    }
+
+    .mini:nth-child(1) { transform: rotate(-1deg); }
+    .mini:nth-child(2) { transform: rotate(0.7deg); }
+    .mini:nth-child(3) { transform: rotate(-0.4deg); }
+
+    .mini span {
+      display: block;
+      font-size: 14px;
+      color: var(--ink-soft);
+      font-weight: 1000;
+    }
+
+    .mini strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 28px;
+      font-weight: 1000;
+    }
+
+    .result-score {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin: 18px 0 8px;
+      font-size: 112px;
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: -0.08em;
+      color: var(--ink);
+      text-shadow: 3px 3px 0 rgba(23,60,53,0.12);
+    }
+
+    .grade {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 1000;
+      letter-spacing: -0.04em;
+      margin-bottom: 7px;
+    }
+
+    .result-note {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      font-weight: 900;
+      margin-top: 7px;
+    }
+
+    .result-card {
+      position: relative;
+      z-index: 1;
+      margin-top: 19px;
+      padding: 14px 16px;
+      border: 4px solid var(--line);
+      border-radius: 23px 19px 25px 21px;
+      background: #fffdf4;
+      box-shadow: 5px 5px 0 rgba(23,60,53,0.12);
+      transform: rotate(0.25deg);
+    }
+
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 2px dashed rgba(23,60,53,0.35);
+      color: var(--ink-soft);
+      font-size: 19px;
+      font-weight: 1000;
+    }
+
+    .result-line:last-child {
+      border-bottom: 0;
+      color: var(--ink);
+    }
+
+    .result-line b {
+      color: var(--ink);
+      font-size: 23px;
+    }
+
+    .small-note {
+      position: relative;
+      z-index: 1;
+      margin-top: 14px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 900;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 23px;
+      transform: translateX(-50%) rotate(-1deg);
+      background: var(--ink);
+      color: var(--paper);
+      border: 3px solid var(--paper);
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      box-shadow: 5px 5px 0 rgba(23,60,53,0.16);
+      z-index: 50;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .countdown {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(23,60,53,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23,60,53,0.035) 1px, transparent 1px),
+        rgba(251,247,232,0.92);
+      background-size: 24px 24px;
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 116px;
+      font-weight: 1000;
+      color: var(--ink);
+      z-index: 100;
+    }
+
+    @media (max-width: 390px) {
+      .card { padding: 21px; }
+      h1 { font-size: 41px; }
+      h2 { font-size: 29px; }
+      #scoreNumber { font-size: 96px; }
+      .result-score { font-size: 96px; }
+      button { font-size: 25px; }
+      .stop-btn { font-size: 32px; }
+      .rule-box { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="startScreen" class="card">
+      <div class="tag">교직원 다모임 미니게임</div>
+      <h1><span class="scribble">100점</span>에<br>멈춰라!</h1>
+      <p>숫자가 0점에서 100점까지 움직입니다.<br>100점에 가장 가까운 순간 버튼을 누르세요.</p>
+
+      <div class="input-wrap">
+        <label for="playerName">참가자 이름</label>
+        <input id="playerName" type="text" placeholder="예: 김OO" maxlength="12" autocomplete="off" />
+      </div>
+
+      <button id="startBtn">게임 시작</button>
+
+      <div class="rule-box">
+        <b>게임 방법</b><br>
+        · 총 3라운드 진행<br>
+        · 각 라운드 점수는 0~100점<br>
+        · 최종 점수는 3라운드 평균값<br>
+        · 결과 확인 후 다시 도전할 수 있습니다
+      </div>
+    </section>
+
+    <section id="gameScreen" class="card hidden">
+      <div class="topbar">
+        <div class="name-chip" id="gameName">참가자</div>
+        <div class="round-chip"><span id="roundNow">1</span> / 3 라운드</div>
+      </div>
+
+      <div class="target">목표: 100점에 최대한 가깝게</div>
+
+      <div class="number-box" id="numberBox" aria-label="현재 점수">
+        <div class="number-title">현재 점수</div>
+        <div id="scoreNumber">0</div>
+        <div class="meter"><div id="meterFill"></div></div>
+      </div>
+
+      <button id="stopBtn" class="stop-btn">멈추기!</button>
+      <div class="hint">점수판을 눌러도 멈출 수 있습니다.</div>
+
+      <div class="mini-row">
+        <div class="mini"><span>1R</span><strong id="mini1">-</strong></div>
+        <div class="mini"><span>2R</span><strong id="mini2">-</strong></div>
+        <div class="mini"><span>3R</span><strong id="mini3">-</strong></div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="card hidden">
+      <div class="tag">최종 결과</div>
+      <h2 id="resultName">참가자</h2>
+      <div class="result-score" id="finalScore">0</div>
+      <div class="grade" id="gradeText">도전 완료</div>
+      <div class="result-note" id="gradeComment">결과 화면을 진행자에게 보여 주세요.</div>
+
+      <div class="result-card">
+        <div class="result-line"><span>1라운드</span><b id="r1">0점</b></div>
+        <div class="result-line"><span>2라운드</span><b id="r2">0점</b></div>
+        <div class="result-line"><span>3라운드</span><b id="r3">0점</b></div>
+        <div class="result-line"><span>최종 점수</span><b id="avgScore">0점</b></div>
+      </div>
+
+      <button id="copyBtn" class="secondary">결과 복사하기</button>
+      <button id="againBtn">다시 도전하기</button>
+      <p class="small-note">최종 점수는 3라운드 평균값입니다.<br>결과 확인 후 다시 도전할 수 있습니다.</p>
+    </section>
+  </div>
+
+  <div id="countdown" class="countdown hidden">3</div>
+  <div id="toast" class="toast">복사되었습니다</div>
+
+  <script>
+    const TOTAL_ROUNDS = 3;
+    const STORAGE_KEY = "stopAt100SketchMonoOnce_v1";
+
+    const startScreen = document.getElementById("startScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const playerNameInput = document.getElementById("playerName");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const againBtn = document.getElementById("againBtn");
+
+    const gameName = document.getElementById("gameName");
+    const roundNow = document.getElementById("roundNow");
+    const scoreNumber = document.getElementById("scoreNumber");
+    const meterFill = document.getElementById("meterFill");
+    const numberBox = document.getElementById("numberBox");
+    const countdown = document.getElementById("countdown");
+    const toast = document.getElementById("toast");
+
+    const mini = [
+      document.getElementById("mini1"),
+      document.getElementById("mini2"),
+      document.getElementById("mini3")
+    ];
+
+    let playerName = "";
+    let round = 1;
+    let scores = [];
+    let running = false;
+    let currentScore = 0;
+    let direction = 1;
+    let speed = 0.9;
+    let animationId = null;
+    let lastTime = 0;
+
+    function show(screen) {
+      startScreen.classList.add("hidden");
+      gameScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      screen.classList.remove("hidden");
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1300);
+    }
+
+    function resetGame() {
+      round = 1;
+      scores = [];
+      currentScore = 0;
+      direction = 1;
+      mini.forEach(el => el.textContent = "-");
+      scoreNumber.textContent = "0";
+      meterFill.style.width = "0%";
+      stopBtn.disabled = false;
+      stopBtn.textContent = "멈추기!";
+    }
+
+    function startCountdown(callback) {
+      let n = 3;
+      countdown.textContent = n;
+      countdown.classList.remove("hidden");
+
+      const timer = setInterval(() => {
+        n -= 1;
+        if (n > 0) {
+          countdown.textContent = n;
+        } else {
+          clearInterval(timer);
+          countdown.textContent = "시작!";
+          setTimeout(() => {
+            countdown.classList.add("hidden");
+            callback();
+          }, 450);
+        }
+      }, 700);
+    }
+
+    function prepareRound() {
+      roundNow.textContent = round;
+      currentScore = Math.floor(Math.random() * 21);
+      direction = 1;
+      speed = 0.075 + Math.random() * 0.035 + (round - 1) * 0.014;
+      scoreNumber.textContent = Math.round(currentScore);
+      meterFill.style.width = `${currentScore}%`;
+      stopBtn.disabled = true;
+      stopBtn.textContent = "준비";
+      startCountdown(() => {
+        stopBtn.disabled = false;
+        stopBtn.textContent = "멈추기!";
+        running = true;
+        lastTime = performance.now();
+        animationId = requestAnimationFrame(tick);
+      });
+    }
+
+    function tick(now) {
+      if (!running) return;
+
+      const dt = now - lastTime;
+      lastTime = now;
+
+      currentScore += direction * speed * dt;
+
+      if (currentScore >= 100) {
+        currentScore = 100;
+        direction = -1;
+      } else if (currentScore <= 0) {
+        currentScore = 0;
+        direction = 1;
+      }
+
+      const displayScore = Math.round(currentScore);
+      scoreNumber.textContent = displayScore;
+      meterFill.style.width = `${displayScore}%`;
+
+      animationId = requestAnimationFrame(tick);
+    }
+
+    function stopRound() {
+      if (!running) return;
+
+      running = false;
+      cancelAnimationFrame(animationId);
+      stopBtn.disabled = true;
+
+      const score = Math.round(currentScore);
+      scores.push(score);
+      mini[round - 1].textContent = score;
+
+      scoreNumber.textContent = score;
+      meterFill.style.width = `${score}%`;
+
+      if (score >= 95) {
+        showToast("거의 100점!");
+      } else if (score >= 80) {
+        showToast("좋은 기록!");
+      } else {
+        showToast("다음 라운드!");
+      }
+
+      setTimeout(() => {
+        if (round < TOTAL_ROUNDS) {
+          round += 1;
+          prepareRound();
+        } else {
+          showResult();
+        }
+      }, 900);
+    }
+
+    function getGrade(score) {
+      if (score >= 95) return ["전설의 타이밍 장인", "거의 완벽합니다. 오늘의 우승 후보입니다."];
+      if (score >= 90) return ["100점 근처 포식자", "아주 훌륭한 기록입니다."];
+      if (score >= 80) return ["침착한 승부사", "안정적인 감각이 느껴집니다."];
+      if (score >= 70) return ["교무실 순발력자", "좋은 기록입니다. 한끗 차이였습니다."];
+      if (score >= 60) return ["타이밍 예열 중", "숫자가 생각보다 빠릅니다."];
+      return ["다음 기회의 주인공", "괜찮습니다. 이 게임은 원래 사람을 약 올립니다."];
+    }
+
+    function saveResult(finalScore) {
+      const saved = {
+        playerName,
+        finalScore,
+        scores,
+        playedAt: new Date().toLocaleString("ko-KR")
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    }
+
+    function restoreSavedResult() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+
+      try {
+        const saved = JSON.parse(raw);
+        playerName = saved.playerName || "참가자";
+        scores = Array.isArray(saved.scores) ? saved.scores : [0, 0, 0];
+        const finalScore = Number(saved.finalScore || 0);
+        const [grade, comment] = getGrade(finalScore);
+
+        document.getElementById("resultName").textContent = playerName + " 참여 완료";
+        document.getElementById("finalScore").textContent = finalScore;
+        document.getElementById("gradeText").textContent = grade;
+        document.getElementById("gradeComment").textContent =
+          "이미 참여한 기록이 있어 다시 참여할 수 없습니다. 결과 화면을 진행자에게 보여 주세요.";
+
+        document.getElementById("r1").textContent = `${scores[0]}점`;
+        document.getElementById("r2").textContent = `${scores[1]}점`;
+        document.getElementById("r3").textContent = `${scores[2]}점`;
+        document.getElementById("avgScore").textContent = `${finalScore}점`;
+
+        show(resultScreen);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function showResult() {
+      const finalScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+      const [grade, comment] = getGrade(finalScore);
+
+      document.getElementById("resultName").textContent = playerName;
+      document.getElementById("finalScore").textContent = finalScore;
+      document.getElementById("gradeText").textContent = grade;
+      document.getElementById("gradeComment").textContent = comment;
+
+      document.getElementById("r1").textContent = `${scores[0]}점`;
+      document.getElementById("r2").textContent = `${scores[1]}점`;
+      document.getElementById("r3").textContent = `${scores[2]}점`;
+      document.getElementById("avgScore").textContent = `${finalScore}점`;
+
+      show(resultScreen);
+    }
+
+    function startGame() {
+      const name = playerNameInput.value.trim();
+      if (!name) {
+        showToast("이름을 입력해 주세요.");
+        playerNameInput.focus();
+        return;
+      }
+
+      playerName = name;
+      gameName.textContent = playerName;
+      resetGame();
+      show(gameScreen);
+      prepareRound();
+    }
+
+    function copyResult() {
+      const finalScore = document.getElementById("finalScore").textContent;
+      const text =
+        `[100점에 멈춰라 결과]\n` +
+        `이름: ${playerName}\n` +
+        `최종 점수: ${finalScore}점\n` +
+        `라운드: ${scores.join(" / ")}점`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast("결과가 복사되었습니다."));
+      } else {
+        showToast("복사가 안 되면 화면을 캡처해 주세요.");
+      }
+    }
+
+    startBtn.addEventListener("click", startGame);
+    stopBtn.addEventListener("click", stopRound);
+    numberBox.addEventListener("click", stopRound);
+    copyBtn.addEventListener("click", copyResult);
+
+    playerNameInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") startGame();
+    });
+
+    againBtn.addEventListener("click", () => {
+      running = false;
+      cancelAnimationFrame(animationId);
+      resetGame();
+      playerNameInput.value = playerName || "";
+      show(startScreen);
+      playerNameInput.focus();
+    });
+  </script>
+</body>
+</html>
