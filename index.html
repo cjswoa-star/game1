@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>100점에 멈춰라! - 반복 가능 버전</title>
+  <title>100점에 멈춰라! - 실시간 공유 버전</title>
   <style>
     :root {
       --paper: #fbf7e8;
@@ -36,8 +36,16 @@
       padding: 18px;
     }
 
+    body.teacher-mode {
+      align-items: flex-start;
+    }
+
     .app {
       width: min(100%, 460px);
+    }
+
+    .app.teacher-app {
+      width: min(100%, 980px);
     }
 
     .card {
@@ -59,9 +67,7 @@
       pointer-events: none;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .tag {
       display: inline-block;
@@ -127,7 +133,7 @@
     }
 
     .input-wrap {
-      margin-top: 24px;
+      margin-top: 20px;
       position: relative;
       z-index: 1;
     }
@@ -184,9 +190,20 @@
       box-shadow: 3px 3px 0 rgba(23,60,53,0.18);
     }
 
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+
     button.secondary {
       background: var(--paper2);
       color: var(--ink);
+    }
+
+    button.danger {
+      background: #fffdf4;
+      color: var(--ink);
+      border-style: dashed;
     }
 
     .rule-box {
@@ -207,6 +224,16 @@
     .rule-box b {
       color: var(--ink);
       font-size: 18px;
+    }
+
+    .room-note {
+      position: relative;
+      z-index: 1;
+      margin-top: 8px;
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.45;
     }
 
     .topbar {
@@ -459,6 +486,17 @@
       font-weight: 900;
     }
 
+    .send-state {
+      position: relative;
+      z-index: 1;
+      margin-top: 11px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 1000;
+      color: var(--ink-soft);
+      min-height: 21px;
+    }
+
     .toast {
       position: fixed;
       left: 50%;
@@ -475,13 +513,11 @@
       pointer-events: none;
       transition: opacity 0.2s ease;
       box-shadow: 5px 5px 0 rgba(23,60,53,0.16);
-      z-index: 50;
+      z-index: 150;
       white-space: nowrap;
     }
 
-    .toast.show {
-      opacity: 1;
-    }
+    .toast.show { opacity: 1; }
 
     .countdown {
       position: fixed;
@@ -501,6 +537,187 @@
       z-index: 100;
     }
 
+    /* 교사용 화면 */
+    .teacher-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .teacher-head h1 {
+      font-size: clamp(36px, 6vw, 58px);
+    }
+
+    .teacher-controls {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(160px, 240px) auto auto;
+      gap: 10px;
+      margin-top: 22px;
+      align-items: end;
+    }
+
+    .teacher-controls .input-wrap {
+      margin-top: 0;
+    }
+
+    .teacher-controls button {
+      margin-top: 0;
+      min-height: 63px;
+      font-size: 18px;
+      padding: 10px 16px;
+      white-space: nowrap;
+    }
+
+    .share-box {
+      position: relative;
+      z-index: 1;
+      margin-top: 15px;
+      padding: 13px 15px;
+      border: 3px dashed var(--line);
+      border-radius: 18px;
+      background: rgba(255,253,244,0.7);
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--ink-soft);
+      word-break: break-all;
+    }
+
+    .share-box strong {
+      color: var(--ink);
+    }
+
+    .stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      background: #fffdf4;
+      border: 3px solid var(--line);
+      border-radius: 20px;
+      padding: 15px 10px;
+      text-align: center;
+      box-shadow: 3px 3px 0 rgba(23,60,53,0.10);
+    }
+
+    .stat span {
+      display: block;
+      font-size: 14px;
+      font-weight: 1000;
+      color: var(--ink-soft);
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 31px;
+      font-weight: 1000;
+    }
+
+    .teacher-table-wrap {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      border: 4px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      background: #fffdf4;
+      box-shadow: 5px 5px 0 rgba(23,60,53,0.10);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th, td {
+      padding: 13px 10px;
+      text-align: center;
+      border-bottom: 2px dashed rgba(23,60,53,0.25);
+      font-weight: 900;
+    }
+
+    th {
+      background: var(--paper2);
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    td {
+      color: var(--ink-soft);
+      font-size: 16px;
+    }
+
+    td.rank, td.score {
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 1000;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .empty-state {
+      position: relative;
+      z-index: 1;
+      padding: 42px 16px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 18px;
+      font-weight: 1000;
+    }
+
+    .teacher-foot {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .teacher-foot button {
+      margin-top: 0;
+      font-size: 18px;
+      min-height: 56px;
+    }
+
+    .connection {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 1000;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 700px) {
+      .teacher-controls {
+        grid-template-columns: 1fr 1fr;
+      }
+      .teacher-controls .input-wrap {
+        grid-column: 1 / -1;
+      }
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      th:nth-child(5), td:nth-child(5) {
+        display: none;
+      }
+      .teacher-foot {
+        flex-direction: column;
+      }
+    }
+
     @media (max-width: 390px) {
       .card { padding: 21px; }
       h1 { font-size: 41px; }
@@ -513,13 +730,21 @@
       .rule-box { font-size: 15px; }
     }
   </style>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=1253"></script>
 </head>
 <body>
-  <div class="app">
+  <!-- 학생용 -->
+  <div id="studentApp" class="app">
     <section id="startScreen" class="card">
       <div class="tag">교직원 다모임 미니게임</div>
       <h1 class="one-line-title"><span class="scribble">100점에 멈춰라!</span></h1>
       <p>숫자가 0점에서 100점까지 움직입니다.<br>100점에 가장 가까운 순간 버튼을 누르세요.</p>
+
+      <div class="input-wrap">
+        <label for="roomCode">활동 코드</label>
+        <input id="roomCode" type="text" inputmode="numeric" placeholder="예: 4832" maxlength="8" autocomplete="off" />
+        <div class="room-note">진행자가 알려 준 코드를 입력하세요.</div>
+      </div>
 
       <div class="input-wrap">
         <label for="playerName">참가자 이름</label>
@@ -533,7 +758,8 @@
         · 총 3라운드 진행<br>
         · 각 라운드 점수는 0~100점<br>
         · 최종 점수는 3라운드 평균값<br>
-        · 결과 확인 후 다시 도전할 수 있습니다
+        · 결과에서 <b>선생님께 보내기</b>를 누르면 실시간 집계됩니다<br>
+        · 다시 도전한 뒤 다시 보내면 최신 결과로 갱신됩니다
       </div>
     </section>
 
@@ -566,7 +792,7 @@
       <h2 id="resultName">참가자</h2>
       <div class="result-score" id="finalScore">0</div>
       <div class="grade" id="gradeText">도전 완료</div>
-      <div class="result-note" id="gradeComment">결과 화면을 진행자에게 보여 주세요.</div>
+      <div class="result-note" id="gradeComment">결과를 확인해 주세요.</div>
 
       <div class="result-card">
         <div class="result-line"><span>1라운드</span><b id="r1">0점</b></div>
@@ -575,26 +801,116 @@
         <div class="result-line"><span>최종 점수</span><b id="avgScore">0점</b></div>
       </div>
 
+      <button id="sendBtn">선생님께 보내기</button>
+      <div id="sendState" class="send-state"></div>
       <button id="copyBtn" class="secondary">결과 복사하기</button>
       <button id="againBtn">다시 도전하기</button>
-      <p class="small-note">최종 점수는 3라운드 평균값입니다.<br>결과 확인 후 다시 도전할 수 있습니다.</p>
+      <p class="small-note">최종 점수는 3라운드 평균값입니다.<br>재도전 후 다시 보내면 교사 화면에는 최신 결과가 표시됩니다.</p>
+    </section>
+  </div>
+
+  <!-- 교사용 -->
+  <div id="teacherApp" class="app teacher-app hidden">
+    <section class="card">
+      <div class="teacher-head">
+        <div>
+          <div class="tag">진행자 실시간 현황판</div>
+          <h1>100점에 멈춰라!</h1>
+          <p>참가자가 결과를 보내는 즉시 이 화면에 나타납니다.</p>
+        </div>
+      </div>
+
+      <div class="teacher-controls">
+        <div class="input-wrap">
+          <label for="teacherRoomCode">활동 코드</label>
+          <input id="teacherRoomCode" type="text" inputmode="numeric" maxlength="8" placeholder="예: 4832" />
+        </div>
+        <button id="openRoomBtn">방 열기</button>
+        <button id="newRoomBtn" class="secondary">새 코드</button>
+      </div>
+
+      <div id="shareBox" class="share-box">
+        <strong>학생용 주소</strong><br>
+        활동 코드를 먼저 열어 주세요.
+      </div>
+
+      <div id="connectionState" class="connection">활동 코드를 입력해 주세요.</div>
+
+      <div class="stats">
+        <div class="stat"><span>참여</span><strong id="statCount">0</strong></div>
+        <div class="stat"><span>평균</span><strong id="statAvg">-</strong></div>
+        <div class="stat"><span>최고</span><strong id="statBest">-</strong></div>
+        <div class="stat"><span>100점</span><strong id="statPerfect">0</strong></div>
+      </div>
+
+      <div class="teacher-table-wrap">
+        <table id="resultTable" class="hidden">
+          <thead>
+            <tr>
+              <th style="width:10%">순위</th>
+              <th style="width:22%">이름</th>
+              <th style="width:16%">최종</th>
+              <th style="width:32%">라운드</th>
+              <th style="width:20%">제출 시각</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty-state">아직 도착한 결과가 없습니다.</div>
+      </div>
+
+      <div class="teacher-foot">
+        <button id="copyStudentLinkBtn" class="secondary">학생용 주소 복사</button>
+        <button id="clearRoomBtn" class="danger">현재 방 결과 전체 지우기</button>
+      </div>
+      <p class="small-note">이 화면은 간단한 다모임·수업 게임용입니다. 민감한 개인정보는 입력하지 마세요.</p>
     </section>
   </div>
 
   <div id="countdown" class="countdown hidden">3</div>
-  <div id="toast" class="toast">복사되었습니다</div>
+  <div id="toast" class="toast">완료</div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      set,
+      onValue,
+      remove,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+    // 기존 emotion-share-test Firebase 프로젝트
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6mWBT6IYc9BkGBPvPhIb0HBDA0Vj3Bxo",
+      authDomain: "emotion-share-test.firebaseapp.com",
+      databaseURL: "https://emotion-share-test-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "emotion-share-test",
+      storageBucket: "emotion-share-test.firebasestorage.app",
+      messagingSenderId: "9314731156",
+      appId: "1:9314731156:web:528c2ff5274f3c4cbee081"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
     const TOTAL_ROUNDS = 3;
-    const STORAGE_KEY = "stopAt100SketchMonoOnce_v1";
+    const DB_ROOT = "stopAt100";
+    const DEVICE_KEY = "stopAt100DeviceId_v2";
+
+    const studentApp = document.getElementById("studentApp");
+    const teacherApp = document.getElementById("teacherApp");
 
     const startScreen = document.getElementById("startScreen");
     const gameScreen = document.getElementById("gameScreen");
     const resultScreen = document.getElementById("resultScreen");
 
+    const roomCodeInput = document.getElementById("roomCode");
     const playerNameInput = document.getElementById("playerName");
     const startBtn = document.getElementById("startBtn");
     const stopBtn = document.getElementById("stopBtn");
+    const sendBtn = document.getElementById("sendBtn");
     const copyBtn = document.getElementById("copyBtn");
     const againBtn = document.getElementById("againBtn");
 
@@ -605,6 +921,7 @@
     const numberBox = document.getElementById("numberBox");
     const countdown = document.getElementById("countdown");
     const toast = document.getElementById("toast");
+    const sendState = document.getElementById("sendState");
 
     const mini = [
       document.getElementById("mini1"),
@@ -612,7 +929,23 @@
       document.getElementById("mini3")
     ];
 
+    const teacherRoomCode = document.getElementById("teacherRoomCode");
+    const openRoomBtn = document.getElementById("openRoomBtn");
+    const newRoomBtn = document.getElementById("newRoomBtn");
+    const copyStudentLinkBtn = document.getElementById("copyStudentLinkBtn");
+    const clearRoomBtn = document.getElementById("clearRoomBtn");
+    const shareBox = document.getElementById("shareBox");
+    const connectionState = document.getElementById("connectionState");
+    const statCount = document.getElementById("statCount");
+    const statAvg = document.getElementById("statAvg");
+    const statBest = document.getElementById("statBest");
+    const statPerfect = document.getElementById("statPerfect");
+    const resultTable = document.getElementById("resultTable");
+    const resultBody = document.getElementById("resultBody");
+    const emptyState = document.getElementById("emptyState");
+
     let playerName = "";
+    let roomCode = "";
     let round = 1;
     let scores = [];
     let running = false;
@@ -621,6 +954,28 @@
     let speed = 0.9;
     let animationId = null;
     let lastTime = 0;
+    let currentFinalScore = 0;
+
+    let currentTeacherRoom = "";
+    let stopTeacherListener = null;
+    let studentShareUrl = "";
+
+    function sanitizeRoom(value) {
+      return String(value || "")
+        .trim()
+        .toUpperCase()
+        .replace(/[^0-9A-Z가-힣_-]/g, "")
+        .slice(0, 8);
+    }
+
+    function getDeviceId() {
+      let id = localStorage.getItem(DEVICE_KEY);
+      if (!id) {
+        id = (crypto.randomUUID ? crypto.randomUUID() : `d_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+        localStorage.setItem(DEVICE_KEY, id);
+      }
+      return id.replace(/[.#$[\]/]/g, "_");
+    }
 
     function show(screen) {
       startScreen.classList.add("hidden");
@@ -632,7 +987,7 @@
     function showToast(text) {
       toast.textContent = text;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1300);
+      setTimeout(() => toast.classList.remove("show"), 1500);
     }
 
     function resetGame() {
@@ -640,11 +995,15 @@
       scores = [];
       currentScore = 0;
       direction = 1;
+      currentFinalScore = 0;
       mini.forEach(el => el.textContent = "-");
       scoreNumber.textContent = "0";
       meterFill.style.width = "0%";
       stopBtn.disabled = false;
       stopBtn.textContent = "멈추기!";
+      sendBtn.disabled = false;
+      sendBtn.textContent = "선생님께 보내기";
+      sendState.textContent = "";
     }
 
     function startCountdown(callback) {
@@ -676,6 +1035,7 @@
       meterFill.style.width = `${currentScore}%`;
       stopBtn.disabled = true;
       stopBtn.textContent = "준비";
+
       startCountdown(() => {
         stopBtn.disabled = false;
         stopBtn.textContent = "멈추기!";
@@ -690,7 +1050,6 @@
 
       const dt = now - lastTime;
       lastTime = now;
-
       currentScore += direction * speed * dt;
 
       if (currentScore >= 100) {
@@ -704,7 +1063,6 @@
       const displayScore = Math.round(currentScore);
       scoreNumber.textContent = displayScore;
       meterFill.style.width = `${displayScore}%`;
-
       animationId = requestAnimationFrame(tick);
     }
 
@@ -749,70 +1107,44 @@
       return ["다음 기회의 주인공", "괜찮습니다. 이 게임은 원래 사람을 약 올립니다."];
     }
 
-    function saveResult(finalScore) {
-      const saved = {
-        playerName,
-        finalScore,
-        scores,
-        playedAt: new Date().toLocaleString("ko-KR")
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-    }
-
-    function restoreSavedResult() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return false;
-
-      try {
-        const saved = JSON.parse(raw);
-        playerName = saved.playerName || "참가자";
-        scores = Array.isArray(saved.scores) ? saved.scores : [0, 0, 0];
-        const finalScore = Number(saved.finalScore || 0);
-        const [grade, comment] = getGrade(finalScore);
-
-        document.getElementById("resultName").textContent = playerName + " 참여 완료";
-        document.getElementById("finalScore").textContent = finalScore;
-        document.getElementById("gradeText").textContent = grade;
-        document.getElementById("gradeComment").textContent =
-          "이미 참여한 기록이 있어 다시 참여할 수 없습니다. 결과 화면을 진행자에게 보여 주세요.";
-
-        document.getElementById("r1").textContent = `${scores[0]}점`;
-        document.getElementById("r2").textContent = `${scores[1]}점`;
-        document.getElementById("r3").textContent = `${scores[2]}점`;
-        document.getElementById("avgScore").textContent = `${finalScore}점`;
-
-        show(resultScreen);
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-
     function showResult() {
-      const finalScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-      const [grade, comment] = getGrade(finalScore);
+      currentFinalScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+      const [grade, comment] = getGrade(currentFinalScore);
 
       document.getElementById("resultName").textContent = playerName;
-      document.getElementById("finalScore").textContent = finalScore;
+      document.getElementById("finalScore").textContent = currentFinalScore;
       document.getElementById("gradeText").textContent = grade;
       document.getElementById("gradeComment").textContent = comment;
 
       document.getElementById("r1").textContent = `${scores[0]}점`;
       document.getElementById("r2").textContent = `${scores[1]}점`;
       document.getElementById("r3").textContent = `${scores[2]}점`;
-      document.getElementById("avgScore").textContent = `${finalScore}점`;
+      document.getElementById("avgScore").textContent = `${currentFinalScore}점`;
 
+      sendBtn.disabled = false;
+      sendBtn.textContent = "선생님께 보내기";
+      sendState.textContent = "";
       show(resultScreen);
     }
 
     function startGame() {
       const name = playerNameInput.value.trim();
+      const room = sanitizeRoom(roomCodeInput.value);
+
+      if (!room) {
+        showToast("활동 코드를 입력해 주세요.");
+        roomCodeInput.focus();
+        return;
+      }
+
       if (!name) {
         showToast("이름을 입력해 주세요.");
         playerNameInput.focus();
         return;
       }
 
+      roomCode = room;
+      roomCodeInput.value = room;
       playerName = name;
       gameName.textContent = playerName;
       resetGame();
@@ -820,38 +1152,278 @@
       prepareRound();
     }
 
+    async function sendResult() {
+      if (!roomCode || !playerName || scores.length !== TOTAL_ROUNDS) {
+        showToast("보낼 결과가 없습니다.");
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "보내는 중...";
+      sendState.textContent = "교사 화면으로 전송하고 있습니다.";
+
+      const deviceId = getDeviceId();
+      const resultRef = ref(db, `${DB_ROOT}/${roomCode}/players/${deviceId}`);
+
+      try {
+        await set(resultRef, {
+          playerName,
+          finalScore: currentFinalScore,
+          scores: [...scores],
+          submittedAt: serverTimestamp(),
+          updatedAtClient: Date.now()
+        });
+
+        sendBtn.textContent = "전송 완료 ✓";
+        sendState.textContent = "선생님 화면에 결과가 전송되었습니다.";
+        showToast("전송 완료!");
+      } catch (error) {
+        console.error("Firebase send error:", error);
+        sendBtn.disabled = false;
+        sendBtn.textContent = "다시 보내기";
+        sendState.textContent = "전송에 실패했습니다. 인터넷 연결 또는 Firebase 권한을 확인해 주세요.";
+        showToast("전송 실패");
+      }
+    }
+
+    async function copyText(text, successMessage) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(successMessage);
+      } catch {
+        showToast("복사가 되지 않았습니다.");
+      }
+    }
+
     function copyResult() {
-      const finalScore = document.getElementById("finalScore").textContent;
       const text =
         `[100점에 멈춰라 결과]\n` +
+        `활동 코드: ${roomCode}\n` +
         `이름: ${playerName}\n` +
-        `최종 점수: ${finalScore}점\n` +
+        `최종 점수: ${currentFinalScore}점\n` +
         `라운드: ${scores.join(" / ")}점`;
 
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showToast("결과가 복사되었습니다."));
+      copyText(text, "결과가 복사되었습니다.");
+    }
+
+    function generateRoomCode() {
+      return String(Math.floor(1000 + Math.random() * 9000));
+    }
+
+    function getStudentUrl(room) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("teacher");
+      url.searchParams.set("room", room);
+      return url.toString();
+    }
+
+    function formatTime(timestamp) {
+      if (!timestamp || !Number.isFinite(timestamp)) return "-";
+      try {
+        return new Date(timestamp).toLocaleTimeString("ko-KR", {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      } catch {
+        return "-";
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderTeacherResults(playersObj) {
+      const rows = Object.entries(playersObj || {})
+        .map(([id, data]) => ({
+          id,
+          playerName: String(data?.playerName || "이름 없음"),
+          finalScore: Number(data?.finalScore ?? 0),
+          scores: Array.isArray(data?.scores) ? data.scores.map(Number) : [],
+          submittedAt: Number(data?.submittedAt || data?.updatedAtClient || 0)
+        }))
+        .filter(item => Number.isFinite(item.finalScore))
+        .sort((a, b) => {
+          if (b.finalScore !== a.finalScore) return b.finalScore - a.finalScore;
+          return a.submittedAt - b.submittedAt;
+        });
+
+      const count = rows.length;
+      const avg = count ? Math.round(rows.reduce((sum, r) => sum + r.finalScore, 0) / count) : null;
+      const best = count ? rows[0].finalScore : null;
+      const perfect = rows.filter(r => r.finalScore === 100).length;
+
+      statCount.textContent = count;
+      statAvg.textContent = avg === null ? "-" : avg;
+      statBest.textContent = best === null ? "-" : best;
+      statPerfect.textContent = perfect;
+
+      if (!count) {
+        resultTable.classList.add("hidden");
+        emptyState.classList.remove("hidden");
+        resultBody.innerHTML = "";
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+      resultTable.classList.remove("hidden");
+
+      let previousScore = null;
+      let previousRank = 0;
+
+      resultBody.innerHTML = rows.map((row, index) => {
+        const rank = row.finalScore === previousScore ? previousRank : index + 1;
+        previousScore = row.finalScore;
+        previousRank = rank;
+
+        return `
+          <tr>
+            <td class="rank">${rank}</td>
+            <td>${escapeHtml(row.playerName)}</td>
+            <td class="score">${row.finalScore}</td>
+            <td>${escapeHtml(row.scores.join(" / "))}</td>
+            <td>${formatTime(row.submittedAt)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function openTeacherRoom(roomValue) {
+      const room = sanitizeRoom(roomValue);
+      if (!room) {
+        showToast("활동 코드를 입력해 주세요.");
+        teacherRoomCode.focus();
+        return;
+      }
+
+      if (stopTeacherListener) {
+        stopTeacherListener();
+        stopTeacherListener = null;
+      }
+
+      currentTeacherRoom = room;
+      teacherRoomCode.value = room;
+      studentShareUrl = getStudentUrl(room);
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("teacher", "1");
+      url.searchParams.set("room", room);
+      history.replaceState(null, "", url.toString());
+
+      shareBox.innerHTML =
+        `<strong>학생용 주소 · 활동 코드 ${escapeHtml(room)}</strong><br>` +
+        `${escapeHtml(studentShareUrl)}`;
+
+      connectionState.textContent = `활동 코드 ${room} · 실시간 결과 수신 중`;
+
+      const roomRef = ref(db, `${DB_ROOT}/${room}/players`);
+      stopTeacherListener = onValue(
+        roomRef,
+        snapshot => renderTeacherResults(snapshot.val()),
+        error => {
+          console.error("Firebase listen error:", error);
+          connectionState.textContent = "결과를 읽지 못했습니다. Firebase 읽기 권한을 확인해 주세요.";
+          showToast("연결 실패");
+        }
+      );
+    }
+
+    async function clearCurrentRoom() {
+      if (!currentTeacherRoom) {
+        showToast("먼저 방을 열어 주세요.");
+        return;
+      }
+
+      const ok = confirm(`활동 코드 ${currentTeacherRoom}의 결과를 모두 지울까요?\n이 작업은 되돌릴 수 없습니다.`);
+      if (!ok) return;
+
+      try {
+        await remove(ref(db, `${DB_ROOT}/${currentTeacherRoom}/players`));
+        showToast("현재 방 결과를 모두 지웠습니다.");
+      } catch (error) {
+        console.error("Firebase clear error:", error);
+        showToast("삭제 실패");
+      }
+    }
+
+    function initMode() {
+      const params = new URLSearchParams(window.location.search);
+      const isTeacher = params.get("teacher") === "1";
+      const roomFromUrl = sanitizeRoom(params.get("room"));
+
+      if (isTeacher) {
+        document.body.classList.add("teacher-mode");
+        studentApp.classList.add("hidden");
+        teacherApp.classList.remove("hidden");
+
+        if (roomFromUrl) {
+          teacherRoomCode.value = roomFromUrl;
+          openTeacherRoom(roomFromUrl);
+        } else {
+          const newCode = generateRoomCode();
+          teacherRoomCode.value = newCode;
+          openTeacherRoom(newCode);
+        }
       } else {
-        showToast("복사가 안 되면 화면을 캡처해 주세요.");
+        teacherApp.classList.add("hidden");
+        studentApp.classList.remove("hidden");
+        if (roomFromUrl) roomCodeInput.value = roomFromUrl;
       }
     }
 
     startBtn.addEventListener("click", startGame);
     stopBtn.addEventListener("click", stopRound);
     numberBox.addEventListener("click", stopRound);
+    sendBtn.addEventListener("click", sendResult);
     copyBtn.addEventListener("click", copyResult);
 
     playerNameInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") startGame();
     });
 
+    roomCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") playerNameInput.focus();
+    });
+
     againBtn.addEventListener("click", () => {
       running = false;
       cancelAnimationFrame(animationId);
       resetGame();
+      roomCodeInput.value = roomCode || roomCodeInput.value;
       playerNameInput.value = playerName || "";
       show(startScreen);
       playerNameInput.focus();
     });
+
+    openRoomBtn.addEventListener("click", () => openTeacherRoom(teacherRoomCode.value));
+
+    teacherRoomCode.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") openTeacherRoom(teacherRoomCode.value);
+    });
+
+    newRoomBtn.addEventListener("click", () => {
+      const code = generateRoomCode();
+      teacherRoomCode.value = code;
+      openTeacherRoom(code);
+      showToast(`새 활동 코드 ${code}`);
+    });
+
+    copyStudentLinkBtn.addEventListener("click", () => {
+      if (!studentShareUrl) {
+        showToast("먼저 방을 열어 주세요.");
+        return;
+      }
+      copyText(studentShareUrl, "학생용 주소가 복사되었습니다.");
+    });
+
+    clearRoomBtn.addEventListener("click", clearCurrentRoom);
+
+    initMode();
   </script>
 </body>
 </html>
