@@ -1,785 +1,112 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>100점에 멈춰라! - 실시간 공유 버전</title>
-  <style>
-    :root {
-      --paper: #fbf7e8;
-      --paper2: #f4ecd3;
-      --ink: #173c35;
-      --ink-soft: #41675f;
-      --line: #173c35;
-      --shadow: rgba(23, 60, 53, 0.16);
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
-      color: var(--ink);
-      background:
-        linear-gradient(rgba(23,60,53,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(23,60,53,0.035) 1px, transparent 1px),
-        radial-gradient(circle at 20% 10%, rgba(23,60,53,0.07), transparent 22%),
-        var(--paper);
-      background-size: 24px 24px, 24px 24px, auto, auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    body.teacher-mode {
-      align-items: flex-start;
-    }
-
-    .app {
-      width: min(100%, 460px);
-    }
-
-    .app.teacher-app {
-      width: min(100%, 980px);
-    }
-
-    .card {
-      position: relative;
-      background: rgba(251,247,232,0.96);
-      border: 4px solid var(--line);
-      border-radius: 26px 32px 24px 30px;
-      padding: 25px;
-      box-shadow: 8px 8px 0 var(--shadow);
-      transform: rotate(-0.2deg);
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border: 2px dashed rgba(23,60,53,0.28);
-      border-radius: 20px 26px 18px 24px;
-      pointer-events: none;
-    }
-
-    .hidden { display: none !important; }
-
-    .tag {
-      display: inline-block;
-      padding: 8px 13px;
-      border: 3px solid var(--line);
-      border-radius: 999px 900px 999px 850px;
-      background: var(--paper2);
-      font-size: 15px;
-      font-weight: 900;
-      transform: rotate(-1.4deg);
-      box-shadow: 3px 3px 0 rgba(23,60,53,0.12);
-      margin-bottom: 15px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 47px;
-      line-height: 1.02;
-      letter-spacing: -0.06em;
-      font-weight: 1000;
-    }
-
-    .one-line-title {
-      white-space: nowrap;
-      font-size: 42px;
-      letter-spacing: -0.07em;
-      text-align: center;
-      width: 100%;
-    }
-
-    h1 .scribble {
-      display: inline-block;
-      position: relative;
-    }
-
-    h1 .scribble::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: -4px;
-      bottom: -6px;
-      height: 9px;
-      border-bottom: 4px solid var(--line);
-      border-radius: 50%;
-      transform: rotate(-1deg);
-      opacity: 0.8;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: 32px;
-      line-height: 1.15;
-      letter-spacing: -0.04em;
-      font-weight: 1000;
-    }
-
-    p {
-      margin: 13px 0 0;
-      color: var(--ink-soft);
-      font-size: 18px;
-      line-height: 1.58;
-      font-weight: 800;
-    }
-
-    .input-wrap {
-      margin-top: 20px;
-      position: relative;
-      z-index: 1;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 9px;
-      font-size: 17px;
-      font-weight: 1000;
-    }
-
-    input {
-      width: 100%;
-      height: 63px;
-      border: 4px solid var(--line);
-      border-radius: 17px 21px 16px 23px;
-      background: #fffdf4;
-      color: var(--ink);
-      padding: 0 17px;
-      font-size: 23px;
-      font-weight: 900;
-      outline: none;
-      box-shadow: 4px 4px 0 rgba(23,60,53,0.12);
-      transform: rotate(0.2deg);
-    }
-
-    input:focus {
-      background: #fffbea;
-      box-shadow: 5px 5px 0 rgba(23,60,53,0.18);
-    }
-
-    button {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      min-height: 66px;
-      border: 4px solid var(--line);
-      border-radius: 22px 18px 24px 19px;
-      background: var(--ink);
-      color: var(--paper);
-      margin-top: 19px;
-      padding: 16px;
-      font-size: 29px;
-      font-weight: 1000;
-      letter-spacing: -0.04em;
-      cursor: pointer;
-      box-shadow: 6px 6px 0 rgba(23,60,53,0.18);
-      touch-action: manipulation;
-      transform: rotate(-0.3deg);
-    }
-
-    button:active {
-      transform: translate(3px, 3px) rotate(-0.3deg);
-      box-shadow: 3px 3px 0 rgba(23,60,53,0.18);
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      cursor: default;
-    }
-
-    button.secondary {
-      background: var(--paper2);
-      color: var(--ink);
-    }
-
-    button.danger {
-      background: #fffdf4;
-      color: var(--ink);
-      border-style: dashed;
-    }
-
-    .rule-box {
-      position: relative;
-      z-index: 1;
-      margin-top: 20px;
-      padding: 15px 16px;
-      border: 3px dashed var(--line);
-      border-radius: 20px 18px 21px 17px;
-      background: rgba(255,253,244,0.72);
-      color: var(--ink-soft);
-      font-size: 16px;
-      line-height: 1.65;
-      font-weight: 900;
-      transform: rotate(0.35deg);
-    }
-
-    .rule-box b {
-      color: var(--ink);
-      font-size: 18px;
-    }
-
-    .room-note {
-      position: relative;
-      z-index: 1;
-      margin-top: 8px;
-      color: var(--ink-soft);
-      font-size: 14px;
-      font-weight: 900;
-      line-height: 1.45;
-    }
-
-    .topbar {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .name-chip,
-    .round-chip {
-      border: 3px solid var(--line);
-      background: var(--paper2);
-      border-radius: 999px;
-      padding: 9px 13px;
-      font-size: 16px;
-      font-weight: 1000;
-      box-shadow: 3px 3px 0 rgba(23,60,53,0.12);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .name-chip {
-      max-width: 58%;
-      transform: rotate(-1deg);
-    }
-
-    .round-chip {
-      flex-shrink: 0;
-      transform: rotate(1deg);
-    }
-
-    .target {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      margin: 9px 0 15px;
-      font-size: 20px;
-      font-weight: 1000;
-    }
-
-    .number-box {
-      position: relative;
-      z-index: 1;
-      background: #fffdf4;
-      border: 5px solid var(--line);
-      border-radius: 34px 28px 36px 30px;
-      padding: 25px 16px 22px;
-      text-align: center;
-      box-shadow: 7px 7px 0 rgba(23,60,53,0.12);
-      transform: rotate(0.25deg);
-      user-select: none;
-    }
-
-    .number-box::after {
-      content: "슥슥";
-      position: absolute;
-      right: 17px;
-      top: 13px;
-      font-size: 15px;
-      font-weight: 1000;
-      color: rgba(23,60,53,0.35);
-      transform: rotate(10deg);
-    }
-
-    .number-title {
-      font-size: 17px;
-      font-weight: 1000;
-      color: var(--ink-soft);
-      margin-bottom: 4px;
-    }
-
-    #scoreNumber {
-      font-size: 116px;
-      line-height: 1;
-      font-weight: 1000;
-      letter-spacing: -0.08em;
-      color: var(--ink);
-      text-shadow:
-        2px 2px 0 rgba(23,60,53,0.10),
-        -1px 1px 0 rgba(23,60,53,0.08);
-    }
-
-    .meter {
-      height: 22px;
-      margin-top: 17px;
-      border: 4px solid var(--line);
-      border-radius: 999px;
-      background:
-        repeating-linear-gradient(
-          -45deg,
-          rgba(23,60,53,0.08),
-          rgba(23,60,53,0.08) 6px,
-          transparent 6px,
-          transparent 12px
-        ),
-        var(--paper2);
-      overflow: hidden;
-    }
-
-    .meter > div {
-      height: 100%;
-      width: 0%;
-      background:
-        repeating-linear-gradient(
-          -45deg,
-          rgba(251,247,232,0.18),
-          rgba(251,247,232,0.18) 5px,
-          transparent 5px,
-          transparent 10px
-        ),
-        var(--ink);
-      border-radius: 999px;
-      transition: width 0.04s linear;
-    }
-
-    .hint {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      margin-top: 14px;
-      color: var(--ink-soft);
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .stop-btn {
-      font-size: 36px;
-      min-height: 80px;
-      border-radius: 28px 24px 30px 22px;
-      margin-top: 20px;
-    }
-
-    .mini-row {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 10px;
-      margin-top: 17px;
-    }
-
-    .mini {
-      flex: 1;
-      background: #fffdf4;
-      border: 3px solid var(--line);
-      border-radius: 20px 17px 21px 18px;
-      padding: 11px 7px 12px;
-      text-align: center;
-      box-shadow: 3px 3px 0 rgba(23,60,53,0.10);
-    }
-
-    .mini:nth-child(1) { transform: rotate(-1deg); }
-    .mini:nth-child(2) { transform: rotate(0.7deg); }
-    .mini:nth-child(3) { transform: rotate(-0.4deg); }
-
-    .mini span {
-      display: block;
-      font-size: 14px;
-      color: var(--ink-soft);
-      font-weight: 1000;
-    }
-
-    .mini strong {
-      display: block;
-      margin-top: 3px;
-      font-size: 28px;
-      font-weight: 1000;
-    }
-
-    .result-score {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      margin: 18px 0 8px;
-      font-size: 112px;
-      line-height: 1;
-      font-weight: 1000;
-      letter-spacing: -0.08em;
-      color: var(--ink);
-      text-shadow: 3px 3px 0 rgba(23,60,53,0.12);
-    }
-
-    .grade {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      font-size: 30px;
-      font-weight: 1000;
-      letter-spacing: -0.04em;
-      margin-bottom: 7px;
-    }
-
-    .result-note {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      font-size: 17px;
-      line-height: 1.55;
-      color: var(--ink-soft);
-      font-weight: 900;
-      margin-top: 7px;
-    }
-
-    .result-card {
-      position: relative;
-      z-index: 1;
-      margin-top: 19px;
-      padding: 14px 16px;
-      border: 4px solid var(--line);
-      border-radius: 23px 19px 25px 21px;
-      background: #fffdf4;
-      box-shadow: 5px 5px 0 rgba(23,60,53,0.12);
-      transform: rotate(0.25deg);
-    }
-
-    .result-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 0;
-      border-bottom: 2px dashed rgba(23,60,53,0.35);
-      color: var(--ink-soft);
-      font-size: 19px;
-      font-weight: 1000;
-    }
-
-    .result-line:last-child {
-      border-bottom: 0;
-      color: var(--ink);
-    }
-
-    .result-line b {
-      color: var(--ink);
-      font-size: 23px;
-    }
-
-    .small-note {
-      position: relative;
-      z-index: 1;
-      margin-top: 14px;
-      text-align: center;
-      color: var(--ink-soft);
-      font-size: 14px;
-      line-height: 1.55;
-      font-weight: 900;
-    }
-
-    .send-state {
-      position: relative;
-      z-index: 1;
-      margin-top: 11px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 1000;
-      color: var(--ink-soft);
-      min-height: 21px;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 23px;
-      transform: translateX(-50%) rotate(-1deg);
-      background: var(--ink);
-      color: var(--paper);
-      border: 3px solid var(--paper);
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-size: 16px;
-      font-weight: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-      box-shadow: 5px 5px 0 rgba(23,60,53,0.16);
-      z-index: 150;
-      white-space: nowrap;
-    }
-
-    .toast.show { opacity: 1; }
-
-    .countdown {
-      position: fixed;
-      inset: 0;
-      background:
-        linear-gradient(rgba(23,60,53,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(23,60,53,0.035) 1px, transparent 1px),
-        rgba(251,247,232,0.92);
-      background-size: 24px 24px;
-      backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 116px;
-      font-weight: 1000;
-      color: var(--ink);
-      z-index: 100;
-    }
-
-    /* 교사용 화면 */
-    .teacher-head {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .teacher-head h1 {
-      font-size: clamp(36px, 6vw, 58px);
-    }
-
-    .teacher-controls {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: minmax(160px, 240px) auto auto;
-      gap: 10px;
-      margin-top: 22px;
-      align-items: end;
-    }
-
-    .teacher-controls .input-wrap {
-      margin-top: 0;
-    }
-
-    .teacher-controls button {
-      margin-top: 0;
-      min-height: 63px;
-      font-size: 18px;
-      padding: 10px 16px;
-      white-space: nowrap;
-    }
-
-    .share-box {
-      position: relative;
-      z-index: 1;
-      margin-top: 15px;
-      padding: 13px 15px;
-      border: 3px dashed var(--line);
-      border-radius: 18px;
-      background: rgba(255,253,244,0.7);
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--ink-soft);
-      word-break: break-all;
-    }
-
-    .share-box strong {
-      color: var(--ink);
-    }
-
-    .stats {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 22px;
-    }
-
-    .stat {
-      background: #fffdf4;
-      border: 3px solid var(--line);
-      border-radius: 20px;
-      padding: 15px 10px;
-      text-align: center;
-      box-shadow: 3px 3px 0 rgba(23,60,53,0.10);
-    }
-
-    .stat span {
-      display: block;
-      font-size: 14px;
-      font-weight: 1000;
-      color: var(--ink-soft);
-    }
-
-    .stat strong {
-      display: block;
-      margin-top: 3px;
-      font-size: 31px;
-      font-weight: 1000;
-    }
-
-    .teacher-table-wrap {
-      position: relative;
-      z-index: 1;
-      margin-top: 18px;
-      border: 4px solid var(--line);
-      border-radius: 22px;
-      overflow: hidden;
-      background: #fffdf4;
-      box-shadow: 5px 5px 0 rgba(23,60,53,0.10);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    th, td {
-      padding: 13px 10px;
-      text-align: center;
-      border-bottom: 2px dashed rgba(23,60,53,0.25);
-      font-weight: 900;
-    }
-
-    th {
-      background: var(--paper2);
-      color: var(--ink);
-      font-size: 14px;
-    }
-
-    td {
-      color: var(--ink-soft);
-      font-size: 16px;
-    }
-
-    td.rank, td.score {
-      color: var(--ink);
-      font-size: 22px;
-      font-weight: 1000;
-    }
-
-    tr:last-child td { border-bottom: 0; }
-
-    .empty-state {
-      position: relative;
-      z-index: 1;
-      padding: 42px 16px;
-      text-align: center;
-      color: var(--ink-soft);
-      font-size: 18px;
-      font-weight: 1000;
-    }
-
-    .teacher-foot {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .teacher-foot button {
-      margin-top: 0;
-      font-size: 18px;
-      min-height: 56px;
-    }
-
-    .connection {
-      position: relative;
-      z-index: 1;
-      margin-top: 10px;
-      font-size: 14px;
-      font-weight: 1000;
-      color: var(--ink-soft);
-    }
-
-    @media (max-width: 700px) {
-      .teacher-controls {
-        grid-template-columns: 1fr 1fr;
-      }
-      .teacher-controls .input-wrap {
-        grid-column: 1 / -1;
-      }
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      th:nth-child(5), td:nth-child(5) {
-        display: none;
-      }
-      .teacher-foot {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 390px) {
-      .card { padding: 21px; }
-      h1 { font-size: 41px; }
-      .one-line-title { font-size: 35px; }
-      h2 { font-size: 29px; }
-      #scoreNumber { font-size: 96px; }
-      .result-score { font-size: 96px; }
-      button { font-size: 25px; }
-      .stop-btn { font-size: 32px; }
-      .rule-box { font-size: 15px; }
-    }
-  </style>
-<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=1253"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#fffaf0">
+<title>100점에 멈춰라! · 파스텔 손그림 V3</title>
+<style>
+:root{
+  --paper:#fffaf0; --ink:#463e37; --coral:#f47882; --mint:#72cdb5; --sky:#67bdeb;
+  --yellow:#ffd66b; --lav:#afa0e8; --line:rgba(80,70,58,.23); --shadow:rgba(88,66,46,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;color:var(--ink)}
+body{background:#f5efe4;display:flex;justify-content:center;align-items:flex-start;padding:0}
+.hidden{display:none!important}
+button,input{font:inherit}
+button{cursor:pointer}
+.student-stage{width:min(100%,430px);margin:0 auto;min-height:100vh}
+.student-screen{position:relative;width:100%;aspect-ratio:852/1846;overflow:hidden;background:#fffaf0}
+.plate{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;user-select:none;pointer-events:none}
+.overlay-field,.overlay-button,.dynamic-chip,.dynamic-score,.dynamic-panel,.mini-row{position:absolute;z-index:3}
+.overlay-field input{width:100%;height:100%;border:2px solid rgba(116,160,155,.45);outline:none;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 3px 10px rgba(84,64,44,.08);padding:0 18px;text-align:center;color:#4d4742;font-size:clamp(14px,4.2vw,20px);font-weight:800}
+.overlay-field input:focus{border-color:#70c9b4;box-shadow:0 0 0 4px rgba(112,201,180,.18)}
+.name-field{left:10.5%;top:72.6%;width:79%;height:6.1%}
+.room-field{left:13%;top:65.3%;width:74%;height:5.3%}
+.room-field input{font-size:clamp(13px,3.9vw,18px)}
+.linked-room{position:absolute;z-index:4;left:27%;top:66.1%;width:46%;padding:6px 10px;border-radius:999px;background:rgba(255,250,225,.94);text-align:center;border:2px dashed rgba(226,168,78,.55);font-weight:800;font-size:clamp(11px,3vw,14px)}
+.linked-room span{margin-right:6px;color:#756454}.linked-room strong{letter-spacing:.08em;color:#e46f72}
+.overlay-button{border:0;border-radius:999px;font-weight:1000;letter-spacing:-.02em;box-shadow:0 5px 0 rgba(103,71,55,.12),0 10px 24px rgba(102,76,50,.12);transition:.12s transform,.12s filter}
+.overlay-button:active{transform:translateY(3px);filter:saturate(.95)}
+.overlay-button:disabled{opacity:.65;cursor:default}
+.start-button{left:10.5%;top:80.3%;width:79%;height:7.1%;background:rgba(244,120,130,.96);color:white;font-size:clamp(19px,5.3vw,28px)}
+
+/* game */
+.game-round-title{left:32%;top:6.5%;width:36%;height:6.8%;display:flex;align-items:center;justify-content:center;border-radius:999px;background:#fffaf0;font-weight:1000;font-size:clamp(18px,5vw,26px);z-index:4;position:absolute}
+.game-name{position:absolute;z-index:3;right:7%;top:15%;max-width:46%;padding:5px 10px;border-radius:999px;background:rgba(255,250,226,.90);font-size:clamp(10px,2.7vw,13px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dynamic-score{left:30%;top:39.1%;width:40%;height:12.5%;display:flex;align-items:center;justify-content:center;border-radius:48%;background:radial-gradient(circle,rgba(255,248,235,.99) 0 65%,rgba(255,248,235,.88) 80%,transparent 100%);font-size:clamp(48px,15vw,76px);font-weight:1000;color:#ee6f79;text-shadow:1px 2px 0 rgba(73,61,52,.15)}
+.dynamic-score small{font-size:.32em;margin-left:3px;color:#4c4540}
+.stop-button{left:13%;top:64.1%;width:74%;height:9.2%;background:rgba(244,112,126,.97);color:white;font-size:clamp(26px,7vw,38px)}
+.meter{position:absolute;z-index:4;left:22%;top:57.3%;width:56%;height:7px;border-radius:99px;background:rgba(215,215,205,.7);overflow:hidden}
+.meter>div{height:100%;width:0;background:linear-gradient(90deg,#65bce8,#6cd0b3,#ffd36d,#f27782);transition:width .04s linear}
+.mini-row{left:20%;top:74.7%;width:60%;display:flex;gap:6px;justify-content:center}
+.mini{min-width:28%;padding:5px 4px;text-align:center;border-radius:14px;background:rgba(255,255,255,.88);border:1px solid rgba(90,82,72,.12);font-size:clamp(9px,2.4vw,12px)}
+.mini span{display:block;color:#9b8d80;font-weight:800}.mini strong{display:block;color:#4b443e;font-size:1.2em}
+
+/* round result */
+.round-result-title{position:absolute;z-index:4;left:19%;top:11.2%;width:62%;padding:6px;text-align:center;border-radius:28px;background:rgba(255,245,214,.94);font-weight:1000;font-size:clamp(20px,5.8vw,30px)}
+.round-result-score{position:absolute;z-index:4;left:25%;top:34%;width:50%;height:15%;display:flex;align-items:center;justify-content:center;border-radius:22px;background:rgba(255,250,239,.96);font-size:clamp(56px,17vw,88px);font-weight:1000;color:#ef727b;text-shadow:2px 2px 0 rgba(90,72,55,.13)}
+.next-button{left:14%;top:77.1%;width:72%;height:8%;background:rgba(91,197,166,.96);color:white;font-size:clamp(22px,6vw,32px)}
+
+/* final */
+.final-panel{left:9.5%;top:40.3%;width:81%;height:31.2%;padding:3% 5%;border-radius:24px;background:#fffaf1;border:2px solid rgba(112,195,174,.38);box-shadow:0 10px 24px rgba(87,67,47,.10)}
+.final-grid{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px;font-size:clamp(14px,4.1vw,20px);font-weight:900}
+.final-grid .lab{color:#81756d}.final-grid .val{font-size:1.08em;color:#3f3934}
+.final-total{margin-top:8px;padding-top:8px;border-top:2px dashed rgba(120,105,93,.22);display:flex;align-items:baseline;justify-content:center;gap:10px;font-weight:1000}
+.final-total span{font-size:clamp(14px,4vw,18px)}.final-total b{font-size:clamp(42px,12vw,66px);color:#ef737c}
+.final-meta{position:absolute;z-index:4;left:13%;top:70.4%;width:74%;text-align:center;font-size:clamp(11px,3.1vw,15px);font-weight:900;color:#6a6059}
+.send-button{left:10.5%;top:76.1%;width:79%;height:7.3%;background:rgba(76,167,236,.96);color:white;font-size:clamp(20px,5.5vw,30px)}
+.again-button{left:16%;top:84.6%;width:68%;height:5.8%;background:rgba(255,255,255,.92);color:#5e7778;border:2px solid rgba(95,173,171,.5);font-size:clamp(14px,4vw,20px);box-shadow:none}
+.copy-link{position:absolute;z-index:4;left:35%;top:91.2%;width:30%;border:0;background:rgba(255,255,255,.75);color:#8a8179;border-radius:999px;font-size:clamp(10px,2.8vw,13px);padding:5px}
+.send-state{position:absolute;z-index:5;left:8%;top:73.2%;width:84%;text-align:center;font-size:clamp(10px,2.8vw,13px);font-weight:900;color:#50747a}
+
+/* sent */
+.home-button{left:10%;top:79.5%;width:80%;height:7.1%;background:rgba(244,120,130,.96);color:white;font-size:clamp(20px,5.4vw,29px)}
+
+/* toast/countdown */
+.toast{position:fixed;left:50%;bottom:22px;z-index:200;transform:translateX(-50%);padding:12px 18px;border-radius:999px;background:#4c4540;color:#fffaf0;font-weight:900;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 20px rgba(0,0,0,.16);white-space:nowrap}.toast.show{opacity:1}
+.countdown{position:fixed;inset:0;z-index:150;display:flex;align-items:center;justify-content:center;background:rgba(255,248,235,.91);backdrop-filter:blur(5px);font-size:min(30vw,140px);font-weight:1000;color:#ef747d;text-shadow:4px 4px 0 #ffe29a}
+
+/* teacher */
+body.teacher-mode{padding:18px;background:#f7f1e6}
+.teacher-app{width:min(1180px,100%);margin:0 auto;position:relative}
+.teacher-shell{position:relative;overflow:hidden;border-radius:34px;background:rgba(255,251,241,.97);box-shadow:0 20px 50px rgba(83,65,46,.18);border:2px solid rgba(98,174,150,.22);padding:26px}
+.teacher-shell::before{content:"";position:absolute;inset:0;background:url('assets/07_teacher_live.webp') center/cover no-repeat;opacity:.09;pointer-events:none}
+.teacher-content{position:relative;z-index:2}
+.teacher-hero{min-height:150px;border-radius:24px;padding:22px 25px;background:linear-gradient(90deg,rgba(255,250,238,.96),rgba(255,250,238,.76)),url('assets/06_teacher_dashboard.webp') center 0/cover no-repeat;border:2px solid rgba(105,191,168,.22);display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.teacher-title .eyebrow{font-weight:900;color:#5ca78f;font-size:14px}.teacher-title h1{margin:6px 0 4px;font-size:clamp(28px,4vw,52px);letter-spacing:-.05em}.teacher-title p{margin:0;color:#746a61;font-weight:800}
+.teacher-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.teacher-controls .field{min-width:170px}.teacher-controls label{display:block;font-size:12px;font-weight:900;margin-bottom:5px;color:#766b61}.teacher-controls input{height:48px;border:2px solid rgba(94,165,149,.35);border-radius:14px;background:rgba(255,255,255,.92);padding:0 12px;font-size:20px;font-weight:1000;letter-spacing:.08em;width:170px;text-align:center;outline:none}.teacher-controls button,.teacher-footer button{border:0;border-radius:14px;min-height:48px;padding:0 18px;font-weight:1000;color:#fff;background:#62bfa5;box-shadow:0 4px 0 rgba(82,116,102,.15)}.teacher-controls button.secondary,.teacher-footer button.secondary{background:#f5b76a;color:#4c433d}.teacher-footer button.danger{background:#ef858b}
+.connection{margin:12px 0 2px;padding:9px 12px;border-radius:12px;background:rgba(104,196,172,.11);font-size:13px;font-weight:900;color:#5c746d}.connection.warn{background:rgba(239,133,139,.12);color:#a65e62}.connection.good{background:rgba(102,194,153,.13);color:#4d816d}
+.share-box{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.78);border:1px dashed rgba(105,168,150,.35);font-size:12px;color:#766d65;word-break:break-all}.share-box strong{color:#3f514c}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.stat{padding:16px;border-radius:20px;border:2px solid rgba(80,70,60,.07);box-shadow:0 8px 18px rgba(88,66,46,.06);text-align:center}.stat:nth-child(1){background:#ffe9ec}.stat:nth-child(2){background:#fff3cc}.stat:nth-child(3){background:#e6f5ff}.stat:nth-child(4){background:#eee9ff}.stat span{display:block;font-size:13px;font-weight:900;color:#7a6e66}.stat strong{display:block;margin-top:4px;font-size:clamp(28px,4vw,42px);font-weight:1000;color:#453e38}
+.teacher-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.8fr);gap:14px}.panel{background:rgba(255,255,255,.91);border:2px solid rgba(105,187,163,.17);border-radius:22px;padding:16px;box-shadow:0 8px 20px rgba(89,68,45,.06)}.panel h2{margin:0 0 12px;font-size:19px;letter-spacing:-.04em}
+.teacher-table-wrap{overflow:auto;border-radius:14px}.teacher-table-wrap table{width:100%;border-collapse:collapse;min-width:580px}.teacher-table-wrap th,.teacher-table-wrap td{padding:10px 8px;text-align:center;border-bottom:1px dashed rgba(96,83,72,.18);font-size:13px}.teacher-table-wrap th{background:#f7f3e9;color:#776e66}.teacher-table-wrap td.rank,.teacher-table-wrap td.score{font-size:16px;font-weight:1000}.empty-state{text-align:center;padding:36px 10px;color:#978a7f;font-weight:900}
+.dist-wrap{height:210px;display:flex;align-items:flex-end;gap:8px;padding:18px 4px 0;border-bottom:2px solid rgba(80,70,60,.11)}.dist-col{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}.dist-count{font-size:12px;font-weight:1000}.dist-bar{width:min(48px,70%);height:8%;min-height:8px;border-radius:12px 12px 4px 4px;transition:.25s;height}.dist-col:nth-child(1) .dist-bar{background:#f5a8ad}.dist-col:nth-child(2) .dist-bar{background:#ffd66b}.dist-col:nth-child(3) .dist-bar{background:#7fd6a9}.dist-col:nth-child(4) .dist-bar{background:#71c5ed}.dist-col:nth-child(5) .dist-bar{background:#afa0e8}.dist-col:nth-child(6) .dist-bar{background:#f27c84}.dist-label{font-size:10px;color:#877a71;font-weight:800}
+.teacher-footer{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}.teacher-footer button{flex:1;min-width:180px}.teacher-note{font-size:11px;color:#8c8078;margin-top:10px;text-align:center;font-weight:800}
+@media(max-width:760px){body.teacher-mode{padding:8px}.teacher-shell{padding:12px;border-radius:20px}.teacher-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.teacher-hero{padding:15px}.teacher-controls{width:100%}.teacher-controls .field,.teacher-controls input{width:100%}.teacher-controls button{flex:1}.teacher-title h1{font-size:34px}}
+</style>
 </head>
+
 <body>
-  <!-- 학생용 -->
-  <div id="studentApp" class="app">
-    <section id="startScreen" class="card">
-      <div class="tag">교직원 다모임 미니게임</div>
-      <h1 class="one-line-title"><span class="scribble">100점에 멈춰라!</span></h1>
-      <p>숫자가 0점에서 100점까지 움직입니다.<br>100점에 가장 가까운 순간 버튼을 누르세요.</p>
-
-      <div class="input-wrap">
-        <label for="roomCode">활동 코드</label>
-        <input id="roomCode" type="text" inputmode="numeric" placeholder="예: 4832" maxlength="8" autocomplete="off" />
-        <div class="room-note">진행자가 알려 준 코드를 입력하세요.</div>
+  <div id="studentApp" class="student-stage">
+    <section id="startScreen" class="student-screen">
+      <img class="plate" src="assets/01_start.webp" alt="파스텔 손그림 시작 화면">
+      <div id="roomInputWrap" class="overlay-field room-field">
+        <input id="roomCode" type="text" inputmode="numeric" maxlength="6" placeholder="활동 코드 6자리" autocomplete="off">
       </div>
-
-      <div class="input-wrap">
-        <label for="playerName">참가자 이름</label>
-        <input id="playerName" type="text" placeholder="예: 김OO" maxlength="12" autocomplete="off" />
-      </div>
-
-      <button id="startBtn">게임 시작</button>
-
-      <div class="rule-box">
-        <b>게임 방법</b><br>
-        · 총 3라운드 진행<br>
-        · 각 라운드 점수는 0~100점<br>
-        · 최종 점수는 3라운드 평균값<br>
-        · 결과에서 <b>선생님께 보내기</b>를 누르면 실시간 집계됩니다<br>
-        · 다시 도전한 뒤 다시 보내면 최신 결과로 갱신됩니다
-      </div>
+      <div id="linkedRoomBox" class="linked-room hidden"><span>활동 코드</span><strong id="linkedRoomCode">------</strong></div>
+      <div class="overlay-field name-field"><input id="playerName" type="text" maxlength="12" placeholder="이름을 입력하세요" autocomplete="off"></div>
+      <button id="startBtn" class="overlay-button start-button">게임 시작하기</button>
     </section>
 
-    <section id="gameScreen" class="card hidden">
-      <div class="topbar">
-        <div class="name-chip" id="gameName">참가자</div>
-        <div class="round-chip"><span id="roundNow">1</span> / 3 라운드</div>
-      </div>
-
-      <div class="target">목표: 100점에 최대한 가깝게</div>
-
-      <div class="number-box" id="numberBox" aria-label="현재 점수">
-        <div class="number-title">현재 점수</div>
-        <div id="scoreNumber">0</div>
-        <div class="meter"><div id="meterFill"></div></div>
-      </div>
-
-      <button id="stopBtn" class="stop-btn">멈추기!</button>
-      <div class="hint">점수판을 눌러도 멈출 수 있습니다.</div>
-
+    <section id="gameScreen" class="student-screen hidden">
+      <img class="plate" src="assets/02_game.webp" alt="파스텔 손그림 게임 화면">
+      <div class="game-round-title"><span id="roundNow">1</span>라운드</div>
+      <div class="game-name" id="gameName">참가자</div>
+      <div id="numberBox" class="dynamic-score" aria-label="현재 점수"><span id="scoreNumber">0</span><small>점</small></div>
+      <div class="meter"><div id="meterFill"></div></div>
+      <button id="stopBtn" class="overlay-button stop-button">멈추기</button>
       <div class="mini-row">
         <div class="mini"><span>1R</span><strong id="mini1">-</strong></div>
         <div class="mini"><span>2R</span><strong id="mini2">-</strong></div>
@@ -787,101 +114,112 @@
       </div>
     </section>
 
-    <section id="resultScreen" class="card hidden">
-      <div class="tag">최종 결과</div>
-      <h2 id="resultName">참가자</h2>
-      <div class="result-score" id="finalScore">0</div>
-      <div class="grade" id="gradeText">도전 완료</div>
-      <div class="result-note" id="gradeComment">결과를 확인해 주세요.</div>
+    <section id="roundResultScreen" class="student-screen hidden">
+      <img class="plate" src="assets/03_round_result.webp" alt="파스텔 손그림 라운드 결과 화면">
+      <div id="roundResultRound" class="round-result-title">1라운드 종료!</div>
+      <div id="roundResultScore" class="round-result-score">68점</div>
+      <button id="nextRoundBtn" class="overlay-button next-button">다음 라운드</button>
+    </section>
 
-      <div class="result-card">
-        <div class="result-line"><span>1라운드</span><b id="r1">0점</b></div>
-        <div class="result-line"><span>2라운드</span><b id="r2">0점</b></div>
-        <div class="result-line"><span>3라운드</span><b id="r3">0점</b></div>
-        <div class="result-line"><span>최종 점수</span><b id="avgScore">0점</b></div>
+    <section id="resultScreen" class="student-screen hidden">
+      <img class="plate" src="assets/04_final_result.webp" alt="파스텔 손그림 최종 결과 화면">
+      <div class="dynamic-panel final-panel">
+        <div class="final-grid">
+          <div class="lab">1라운드</div><div class="val" id="r1">0점</div>
+          <div class="lab">2라운드</div><div class="val" id="r2">0점</div>
+          <div class="lab">3라운드</div><div class="val" id="r3">0점</div>
+        </div>
+        <div class="final-total"><span>최종 점수</span><b id="finalScore">0</b><span>점</span></div>
+        <div id="avgScore" class="hidden">0점</div>
       </div>
-
-      <button id="sendBtn">선생님께 보내기</button>
+      <div id="resultName" class="hidden">참가자</div>
+      <div id="gradeText" class="hidden">도전 완료</div>
+      <div id="gradeComment" class="final-meta">멋진 도전이었어요!</div>
       <div id="sendState" class="send-state"></div>
-      <button id="copyBtn" class="secondary">결과 복사하기</button>
-      <button id="againBtn">다시 도전하기</button>
-      <p class="small-note">최종 점수는 3라운드 평균값입니다.<br>재도전 후 다시 보내면 교사 화면에는 최신 결과가 표시됩니다.</p>
+      <button id="sendBtn" class="overlay-button send-button">✈ 선생님께 보내기</button>
+      <button id="againBtn" class="overlay-button again-button">↻ 다시 도전하기</button>
+      <button id="copyBtn" class="copy-link">결과 복사</button>
+    </section>
+
+    <section id="sendCompleteScreen" class="student-screen hidden">
+      <img class="plate" src="assets/05_send_complete.webp" alt="파스텔 손그림 전송 완료 화면">
+      <button id="homeBtn" class="overlay-button home-button">⌂ 처음으로 돌아가기</button>
     </section>
   </div>
 
-  <!-- 교사용 -->
-  <div id="teacherApp" class="app teacher-app hidden">
-    <section class="card">
-      <div class="teacher-head">
-        <div>
-          <div class="tag">진행자 실시간 현황판</div>
-          <h1>100점에 멈춰라!</h1>
-          <p>참가자가 결과를 보내는 즉시 이 화면에 나타납니다.</p>
+  <div id="teacherApp" class="teacher-app hidden">
+    <section class="teacher-shell">
+      <div class="teacher-content">
+        <div class="teacher-hero">
+          <div class="teacher-title">
+            <div class="eyebrow">100점에 멈춰라! · 교사용</div>
+            <h1>실시간 현황판</h1>
+            <p>학생들이 보낸 결과가 바로 모입니다.</p>
+          </div>
+          <div class="teacher-controls">
+            <div class="field"><label for="teacherRoomCode">활동 코드</label><input id="teacherRoomCode" type="text" inputmode="numeric" maxlength="6" placeholder="583214"></div>
+            <button id="openRoomBtn">내 방 열기</button>
+            <button id="newRoomBtn" class="secondary">새 활동</button>
+          </div>
         </div>
-      </div>
+        <div id="connectionState" class="connection">활동 코드를 준비하고 있습니다.</div>
+        <div id="shareBox" class="share-box"><strong>학생용 주소</strong><br>활동을 열면 여기에 링크가 표시됩니다.</div>
 
-      <div class="teacher-controls">
-        <div class="input-wrap">
-          <label for="teacherRoomCode">활동 코드</label>
-          <input id="teacherRoomCode" type="text" inputmode="numeric" maxlength="8" placeholder="예: 4832" />
+        <div class="stats">
+          <div class="stat"><span>참여 인원</span><strong id="statCount">0</strong></div>
+          <div class="stat"><span>평균 점수</span><strong id="statAvg">-</strong></div>
+          <div class="stat"><span>최고 점수</span><strong id="statBest">-</strong></div>
+          <div class="stat"><span>100점 달성</span><strong id="statPerfect">0</strong></div>
         </div>
-        <button id="openRoomBtn">방 열기</button>
-        <button id="newRoomBtn" class="secondary">새 코드</button>
-      </div>
 
-      <div id="shareBox" class="share-box">
-        <strong>학생용 주소</strong><br>
-        활동 코드를 먼저 열어 주세요.
+        <div class="teacher-grid">
+          <div class="panel">
+            <h2>👑 실시간 랭킹</h2>
+            <div class="teacher-table-wrap">
+              <table id="resultTable" class="hidden"><thead><tr><th>순위</th><th>이름</th><th>최종</th><th>1R / 2R / 3R</th><th>제출</th></tr></thead><tbody id="resultBody"></tbody></table>
+              <div id="emptyState" class="empty-state">아직 도착한 결과가 없습니다.</div>
+            </div>
+          </div>
+          <div class="panel">
+            <h2>📊 점수 분포</h2>
+            <div class="dist-wrap">
+              <div class="dist-col"><span class="dist-count" data-dist-count>0</span><div class="dist-bar" data-dist-bar></div><span class="dist-label">0~20</span></div>
+              <div class="dist-col"><span class="dist-count" data-dist-count>0</span><div class="dist-bar" data-dist-bar></div><span class="dist-label">21~40</span></div>
+              <div class="dist-col"><span class="dist-count" data-dist-count>0</span><div class="dist-bar" data-dist-bar></div><span class="dist-label">41~60</span></div>
+              <div class="dist-col"><span class="dist-count" data-dist-count>0</span><div class="dist-bar" data-dist-bar></div><span class="dist-label">61~80</span></div>
+              <div class="dist-col"><span class="dist-count" data-dist-count>0</span><div class="dist-bar" data-dist-bar></div><span class="dist-label">81~99</span></div>
+              <div class="dist-col"><span class="dist-count" data-dist-count>0</span><div class="dist-bar" data-dist-bar></div><span class="dist-label">100</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="teacher-footer">
+          <button id="copyStudentLinkBtn" class="secondary">학생용 주소 복사</button>
+          <button id="closeRoomBtn" class="danger">활동 종료</button>
+        </div>
+        <div class="teacher-note">민감한 개인정보는 입력하지 마세요. · 파스텔 이미지 쉘 V3</div>
       </div>
-
-      <div id="connectionState" class="connection">활동 코드를 입력해 주세요.</div>
-
-      <div class="stats">
-        <div class="stat"><span>참여</span><strong id="statCount">0</strong></div>
-        <div class="stat"><span>평균</span><strong id="statAvg">-</strong></div>
-        <div class="stat"><span>최고</span><strong id="statBest">-</strong></div>
-        <div class="stat"><span>100점</span><strong id="statPerfect">0</strong></div>
-      </div>
-
-      <div class="teacher-table-wrap">
-        <table id="resultTable" class="hidden">
-          <thead>
-            <tr>
-              <th style="width:10%">순위</th>
-              <th style="width:22%">이름</th>
-              <th style="width:16%">최종</th>
-              <th style="width:32%">라운드</th>
-              <th style="width:20%">제출 시각</th>
-            </tr>
-          </thead>
-          <tbody id="resultBody"></tbody>
-        </table>
-        <div id="emptyState" class="empty-state">아직 도착한 결과가 없습니다.</div>
-      </div>
-
-      <div class="teacher-foot">
-        <button id="copyStudentLinkBtn" class="secondary">학생용 주소 복사</button>
-        <button id="clearRoomBtn" class="danger">현재 방 결과 전체 지우기</button>
-      </div>
-      <p class="small-note">이 화면은 간단한 다모임·수업 게임용입니다. 민감한 개인정보는 입력하지 마세요.</p>
     </section>
   </div>
 
   <div id="countdown" class="countdown hidden">3</div>
   <div id="toast" class="toast">완료</div>
 
-  <script type="module">
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import {
       getDatabase,
       ref,
       set,
+      get,
       onValue,
-      remove,
+      update,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+    import {
+      getAuth,
+      signInAnonymously
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-    // 기존 emotion-share-test Firebase 프로젝트
     const firebaseConfig = {
       apiKey: "AIzaSyB6mWBT6IYc9BkGBPvPhIb0HBDA0Vj3Bxo",
       authDomain: "emotion-share-test.firebaseapp.com",
@@ -894,18 +232,25 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
 
     const TOTAL_ROUNDS = 3;
-    const DB_ROOT = "stopAt100";
-    const DEVICE_KEY = "stopAt100DeviceId_v2";
+    const DB_ROOT = "stopAt100_v2";
+    const PARTICIPANT_PREFIX = "stopAt100Participant_v2";
+    const ROOM_CODE_LENGTH = 6;
 
     const studentApp = document.getElementById("studentApp");
     const teacherApp = document.getElementById("teacherApp");
 
     const startScreen = document.getElementById("startScreen");
     const gameScreen = document.getElementById("gameScreen");
+    const roundResultScreen = document.getElementById("roundResultScreen");
     const resultScreen = document.getElementById("resultScreen");
+    const sendCompleteScreen = document.getElementById("sendCompleteScreen");
 
+    const roomInputWrap = document.getElementById("roomInputWrap");
+    const linkedRoomBox = document.getElementById("linkedRoomBox");
+    const linkedRoomCode = document.getElementById("linkedRoomCode");
     const roomCodeInput = document.getElementById("roomCode");
     const playerNameInput = document.getElementById("playerName");
     const startBtn = document.getElementById("startBtn");
@@ -922,6 +267,10 @@
     const countdown = document.getElementById("countdown");
     const toast = document.getElementById("toast");
     const sendState = document.getElementById("sendState");
+    const roundResultRound = document.getElementById("roundResultRound");
+    const roundResultScore = document.getElementById("roundResultScore");
+    const nextRoundBtn = document.getElementById("nextRoundBtn");
+    const homeBtn = document.getElementById("homeBtn");
 
     const mini = [
       document.getElementById("mini1"),
@@ -933,7 +282,7 @@
     const openRoomBtn = document.getElementById("openRoomBtn");
     const newRoomBtn = document.getElementById("newRoomBtn");
     const copyStudentLinkBtn = document.getElementById("copyStudentLinkBtn");
-    const clearRoomBtn = document.getElementById("clearRoomBtn");
+    const closeRoomBtn = document.getElementById("closeRoomBtn");
     const shareBox = document.getElementById("shareBox");
     const connectionState = document.getElementById("connectionState");
     const statCount = document.getElementById("statCount");
@@ -943,9 +292,12 @@
     const resultTable = document.getElementById("resultTable");
     const resultBody = document.getElementById("resultBody");
     const emptyState = document.getElementById("emptyState");
+    const distBars = Array.from(document.querySelectorAll("[data-dist-bar]"));
+    const distCounts = Array.from(document.querySelectorAll("[data-dist-count]"));
 
     let playerName = "";
     let roomCode = "";
+    let roomFromLink = "";
     let round = 1;
     let scores = [];
     let running = false;
@@ -959,35 +311,71 @@
     let currentTeacherRoom = "";
     let stopTeacherListener = null;
     let studentShareUrl = "";
+    let teacherUser = null;
 
     function sanitizeRoom(value) {
       return String(value || "")
         .trim()
-        .toUpperCase()
-        .replace(/[^0-9A-Z가-힣_-]/g, "")
-        .slice(0, 8);
+        .replace(/[^0-9]/g, "")
+        .slice(0, ROOM_CODE_LENGTH);
     }
 
-    function getDeviceId() {
-      let id = localStorage.getItem(DEVICE_KEY);
-      if (!id) {
-        id = (crypto.randomUUID ? crypto.randomUUID() : `d_${Date.now()}_${Math.random().toString(36).slice(2)}`);
-        localStorage.setItem(DEVICE_KEY, id);
+    function normalizeName(value) {
+      return String(value || "").trim().replace(/\s+/g, " ").slice(0, 12);
+    }
+
+    function randomToken() {
+      if (crypto.randomUUID) return crypto.randomUUID().replaceAll("-", "");
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    function simpleNameKey(name) {
+      let hash = 2166136261;
+      const normalized = normalizeName(name).toLowerCase();
+      for (let i = 0; i < normalized.length; i += 1) {
+        hash ^= normalized.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
       }
-      return id.replace(/[.#$[\]/]/g, "_");
+      return (hash >>> 0).toString(36);
+    }
+
+    function getParticipantIdentity(room, name) {
+      const storageKey = `${PARTICIPANT_PREFIX}:${room}:${simpleNameKey(name)}`;
+      let saved = null;
+      try {
+        saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+      } catch (_) {
+        saved = null;
+      }
+
+      if (!saved?.participantId || !saved?.writerKey) {
+        saved = {
+          participantId: `p_${randomToken()}`,
+          writerKey: randomToken()
+        };
+        localStorage.setItem(storageKey, JSON.stringify(saved));
+      }
+      return saved;
     }
 
     function show(screen) {
-      startScreen.classList.add("hidden");
-      gameScreen.classList.add("hidden");
-      resultScreen.classList.add("hidden");
+      [startScreen, gameScreen, roundResultScreen, resultScreen, sendCompleteScreen].forEach(el => el.classList.add("hidden"));
       screen.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
 
     function showToast(text) {
       toast.textContent = text;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 1500);
+    }
+
+    function setConnection(text, state = "") {
+      connectionState.textContent = text;
+      connectionState.classList.remove("good", "warn");
+      if (state) connectionState.classList.add(state);
     }
 
     function resetGame() {
@@ -1047,7 +435,6 @@
 
     function tick(now) {
       if (!running) return;
-
       const dt = now - lastTime;
       lastTime = now;
       currentScore += direction * speed * dt;
@@ -1068,7 +455,6 @@
 
     function stopRound() {
       if (!running) return;
-
       running = false;
       cancelAnimationFrame(animationId);
       stopBtn.disabled = true;
@@ -1076,26 +462,21 @@
       const score = Math.round(currentScore);
       scores.push(score);
       mini[round - 1].textContent = score;
-
       scoreNumber.textContent = score;
       meterFill.style.width = `${score}%`;
 
-      if (score >= 95) {
-        showToast("거의 100점!");
-      } else if (score >= 80) {
-        showToast("좋은 기록!");
-      } else {
-        showToast("다음 라운드!");
-      }
+      if (score >= 95) showToast("거의 100점!");
+      else if (score >= 80) showToast("좋은 기록!");
+      else showToast("다음 라운드!");
 
-      setTimeout(() => {
-        if (round < TOTAL_ROUNDS) {
-          round += 1;
-          prepareRound();
-        } else {
-          showResult();
-        }
-      }, 900);
+      if (round < TOTAL_ROUNDS) {
+        roundResultRound.textContent = `${round}라운드 종료!`;
+        roundResultScore.textContent = `${score}점`;
+        nextRoundBtn.textContent = "다음 라운드";
+        show(roundResultScreen);
+      } else {
+        showResult();
+      }
     }
 
     function getGrade(score) {
@@ -1115,7 +496,6 @@
       document.getElementById("finalScore").textContent = currentFinalScore;
       document.getElementById("gradeText").textContent = grade;
       document.getElementById("gradeComment").textContent = comment;
-
       document.getElementById("r1").textContent = `${scores[0]}점`;
       document.getElementById("r2").textContent = `${scores[1]}점`;
       document.getElementById("r3").textContent = `${scores[2]}점`;
@@ -1127,24 +507,47 @@
       show(resultScreen);
     }
 
-    function startGame() {
-      const name = playerNameInput.value.trim();
-      const room = sanitizeRoom(roomCodeInput.value);
+    async function readRoomMeta(room) {
+      try {
+        const snap = await get(ref(db, `${DB_ROOT}/rooms/${room}/meta`));
+        return snap.exists() ? snap.val() : null;
+      } catch (error) {
+        console.error("Room meta read error:", error);
+        return null;
+      }
+    }
 
-      if (!room) {
-        showToast("활동 코드를 입력해 주세요.");
-        roomCodeInput.focus();
+    async function startGame() {
+      const name = normalizeName(playerNameInput.value);
+      const room = sanitizeRoom(roomFromLink || roomCodeInput.value);
+
+      if (room.length !== ROOM_CODE_LENGTH) {
+        showToast("6자리 활동 코드를 확인해 주세요.");
+        if (!roomFromLink) roomCodeInput.focus();
         return;
       }
-
       if (!name) {
         showToast("이름을 입력해 주세요.");
         playerNameInput.focus();
         return;
       }
 
+      startBtn.disabled = true;
+      startBtn.textContent = "확인 중...";
+      const meta = await readRoomMeta(room);
+      startBtn.disabled = false;
+      startBtn.textContent = "게임 시작하기";
+
+      if (!meta) {
+        showToast("존재하지 않는 활동 코드입니다.");
+        return;
+      }
+      if (meta.closed === true) {
+        showToast("종료된 활동입니다.");
+        return;
+      }
+
       roomCode = room;
-      roomCodeInput.value = room;
       playerName = name;
       gameName.textContent = playerName;
       resetGame();
@@ -1162,26 +565,32 @@
       sendBtn.textContent = "보내는 중...";
       sendState.textContent = "교사 화면으로 전송하고 있습니다.";
 
-      const deviceId = getDeviceId();
-      const resultRef = ref(db, `${DB_ROOT}/${roomCode}/players/${deviceId}`);
-
       try {
+        const meta = await readRoomMeta(roomCode);
+        if (!meta || meta.closed === true) throw new Error("ROOM_CLOSED_OR_MISSING");
+
+        const identity = getParticipantIdentity(roomCode, playerName);
+        const resultRef = ref(db, `${DB_ROOT}/rooms/${roomCode}/players/${identity.participantId}`);
+
         await set(resultRef, {
           playerName,
           finalScore: currentFinalScore,
           scores: [...scores],
           submittedAt: serverTimestamp(),
-          updatedAtClient: Date.now()
+          updatedAtClient: Date.now(),
+          writerKey: identity.writerKey,
+          version: 2
         });
 
         sendBtn.textContent = "전송 완료 ✓";
         sendState.textContent = "선생님 화면에 결과가 전송되었습니다.";
         showToast("전송 완료!");
+        setTimeout(() => show(sendCompleteScreen), 320);
       } catch (error) {
         console.error("Firebase send error:", error);
         sendBtn.disabled = false;
         sendBtn.textContent = "다시 보내기";
-        sendState.textContent = "전송에 실패했습니다. 인터넷 연결 또는 Firebase 권한을 확인해 주세요.";
+        sendState.textContent = "전송에 실패했습니다. 활동이 종료되었거나 Firebase 규칙을 확인해야 합니다.";
         showToast("전송 실패");
       }
     }
@@ -1190,7 +599,7 @@
       try {
         await navigator.clipboard.writeText(text);
         showToast(successMessage);
-      } catch {
+      } catch (_) {
         showToast("복사가 되지 않았습니다.");
       }
     }
@@ -1202,12 +611,44 @@
         `이름: ${playerName}\n` +
         `최종 점수: ${currentFinalScore}점\n` +
         `라운드: ${scores.join(" / ")}점`;
-
       copyText(text, "결과가 복사되었습니다.");
     }
 
     function generateRoomCode() {
-      return String(Math.floor(1000 + Math.random() * 9000));
+      const min = 10 ** (ROOM_CODE_LENGTH - 1);
+      const max = (10 ** ROOM_CODE_LENGTH) - 1;
+      return String(Math.floor(min + Math.random() * (max - min + 1)));
+    }
+
+    async function ensureTeacherAuth() {
+      if (auth.currentUser) {
+        teacherUser = auth.currentUser;
+        return teacherUser;
+      }
+      const credential = await signInAnonymously(auth);
+      teacherUser = credential.user;
+      return teacherUser;
+    }
+
+    async function createUniqueRoom() {
+      const user = await ensureTeacherAuth();
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        const code = generateRoomCode();
+        const metaRef = ref(db, `${DB_ROOT}/rooms/${code}/meta`);
+        const snap = await get(metaRef);
+        if (snap.exists()) continue;
+
+        await set(metaRef, {
+          ownerUid: user.uid,
+          createdAt: serverTimestamp(),
+          createdAtClient: Date.now(),
+          closed: false,
+          version: 2,
+          title: "100점에 멈춰라!"
+        });
+        return code;
+      }
+      throw new Error("ROOM_CODE_EXHAUSTED");
     }
 
     function getStudentUrl(room) {
@@ -1220,11 +661,8 @@
     function formatTime(timestamp) {
       if (!timestamp || !Number.isFinite(timestamp)) return "-";
       try {
-        return new Date(timestamp).toLocaleTimeString("ko-KR", {
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-      } catch {
+        return new Date(timestamp).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+      } catch (_) {
         return "-";
       }
     }
@@ -1247,7 +685,7 @@
           scores: Array.isArray(data?.scores) ? data.scores.map(Number) : [],
           submittedAt: Number(data?.submittedAt || data?.updatedAtClient || 0)
         }))
-        .filter(item => Number.isFinite(item.finalScore))
+        .filter(item => Number.isFinite(item.finalScore) && item.scores.length === TOTAL_ROUNDS)
         .sort((a, b) => {
           if (b.finalScore !== a.finalScore) return b.finalScore - a.finalScore;
           return a.submittedAt - b.submittedAt;
@@ -1257,6 +695,7 @@
       const avg = count ? Math.round(rows.reduce((sum, r) => sum + r.finalScore, 0) / count) : null;
       const best = count ? rows[0].finalScore : null;
       const perfect = rows.filter(r => r.finalScore === 100).length;
+      renderDistribution(rows);
 
       statCount.textContent = count;
       statAvg.textContent = avg === null ? "-" : avg;
@@ -1275,12 +714,10 @@
 
       let previousScore = null;
       let previousRank = 0;
-
       resultBody.innerHTML = rows.map((row, index) => {
         const rank = row.finalScore === previousScore ? previousRank : index + 1;
         previousScore = row.finalScore;
         previousRank = rank;
-
         return `
           <tr>
             <td class="rank">${rank}</td>
@@ -1293,86 +730,177 @@
       }).join("");
     }
 
-    function openTeacherRoom(roomValue) {
-      const room = sanitizeRoom(roomValue);
-      if (!room) {
-        showToast("활동 코드를 입력해 주세요.");
-        teacherRoomCode.focus();
-        return;
-      }
-
-      if (stopTeacherListener) {
-        stopTeacherListener();
-        stopTeacherListener = null;
-      }
-
-      currentTeacherRoom = room;
-      teacherRoomCode.value = room;
-      studentShareUrl = getStudentUrl(room);
-
-      const url = new URL(window.location.href);
-      url.searchParams.set("teacher", "1");
-      url.searchParams.set("room", room);
-      history.replaceState(null, "", url.toString());
-
-      shareBox.innerHTML =
-        `<strong>학생용 주소 · 활동 코드 ${escapeHtml(room)}</strong><br>` +
-        `${escapeHtml(studentShareUrl)}`;
-
-      connectionState.textContent = `활동 코드 ${room} · 실시간 결과 수신 중`;
-
-      const roomRef = ref(db, `${DB_ROOT}/${room}/players`);
-      stopTeacherListener = onValue(
-        roomRef,
-        snapshot => renderTeacherResults(snapshot.val()),
-        error => {
-          console.error("Firebase listen error:", error);
-          connectionState.textContent = "결과를 읽지 못했습니다. Firebase 읽기 권한을 확인해 주세요.";
-          showToast("연결 실패");
-        }
-      );
+    function renderDistribution(rows) {
+      const bins = [0, 0, 0, 0, 0, 0];
+      rows.forEach(row => {
+        const s = Number(row.finalScore || 0);
+        if (s <= 20) bins[0] += 1;
+        else if (s <= 40) bins[1] += 1;
+        else if (s <= 60) bins[2] += 1;
+        else if (s <= 80) bins[3] += 1;
+        else if (s < 100) bins[4] += 1;
+        else bins[5] += 1;
+      });
+      const max = Math.max(1, ...bins);
+      distBars.forEach((bar, i) => { bar.style.height = `${Math.max(8, Math.round((bins[i] / max) * 100))}%`; });
+      distCounts.forEach((el, i) => { el.textContent = bins[i]; });
     }
 
-    async function clearCurrentRoom() {
-      if (!currentTeacherRoom) {
-        showToast("먼저 방을 열어 주세요.");
-        return;
-      }
+    function resetTeacherStats() {
+      statCount.textContent = "0";
+      statAvg.textContent = "-";
+      statBest.textContent = "-";
+      statPerfect.textContent = "0";
+      resultBody.innerHTML = "";
+      resultTable.classList.add("hidden");
+      emptyState.classList.remove("hidden");
+      renderDistribution([]);
+    }
 
-      const ok = confirm(`활동 코드 ${currentTeacherRoom}의 결과를 모두 지울까요?\n이 작업은 되돌릴 수 없습니다.`);
-      if (!ok) return;
+    async function openTeacherRoom(roomValue) {
+      const room = sanitizeRoom(roomValue);
+      if (room.length !== ROOM_CODE_LENGTH) {
+        showToast("6자리 활동 코드를 확인해 주세요.");
+        teacherRoomCode.focus();
+        return false;
+      }
 
       try {
-        await remove(ref(db, `${DB_ROOT}/${currentTeacherRoom}/players`));
-        showToast("현재 방 결과를 모두 지웠습니다.");
+        const user = await ensureTeacherAuth();
+        const meta = await readRoomMeta(room);
+        if (!meta) {
+          setConnection("존재하지 않는 활동 코드입니다.", "warn");
+          resetTeacherStats();
+          return false;
+        }
+        if (meta.ownerUid !== user.uid) {
+          setConnection("이 브라우저에서 만든 활동이 아니어서 교사 화면을 열 수 없습니다.", "warn");
+          resetTeacherStats();
+          return false;
+        }
+
+        if (stopTeacherListener) {
+          stopTeacherListener();
+          stopTeacherListener = null;
+        }
+
+        currentTeacherRoom = room;
+        teacherRoomCode.value = room;
+        studentShareUrl = getStudentUrl(room);
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("teacher", "1");
+        url.searchParams.set("room", room);
+        history.replaceState(null, "", url.toString());
+
+        shareBox.innerHTML =
+          `<strong>학생용 주소 · 활동 코드 ${escapeHtml(room)}</strong><br>` +
+          `${escapeHtml(studentShareUrl)}`;
+
+        setConnection(meta.closed === true
+          ? `활동 코드 ${room} · 종료된 활동`
+          : `활동 코드 ${room} · 실시간 결과 수신 중`,
+          meta.closed === true ? "warn" : "good"
+        );
+        closeRoomBtn.disabled = meta.closed === true;
+        closeRoomBtn.textContent = meta.closed === true ? "활동 종료됨" : "활동 종료";
+
+        const playersRef = ref(db, `${DB_ROOT}/rooms/${room}/players`);
+        stopTeacherListener = onValue(
+          playersRef,
+          snapshot => renderTeacherResults(snapshot.val()),
+          error => {
+            console.error("Firebase listen error:", error);
+            setConnection("결과 읽기 권한이 없습니다. Firebase 규칙을 확인해 주세요.", "warn");
+            showToast("연결 실패");
+          }
+        );
+        return true;
       } catch (error) {
-        console.error("Firebase clear error:", error);
-        showToast("삭제 실패");
+        console.error("Teacher room open error:", error);
+        setConnection("교사 인증에 실패했습니다. Firebase 익명 로그인을 확인해 주세요.", "warn");
+        showToast("교사 인증 실패");
+        return false;
       }
     }
 
-    function initMode() {
+    async function createAndOpenRoom() {
+      newRoomBtn.disabled = true;
+      newRoomBtn.textContent = "만드는 중...";
+      try {
+        const code = await createUniqueRoom();
+        teacherRoomCode.value = code;
+        await openTeacherRoom(code);
+        showToast(`새 활동 코드 ${code}`);
+      } catch (error) {
+        console.error("Room create error:", error);
+        setConnection("새 활동을 만들지 못했습니다. Firebase 익명 로그인/규칙을 확인해 주세요.", "warn");
+        showToast("새 활동 생성 실패");
+      } finally {
+        newRoomBtn.disabled = false;
+        newRoomBtn.textContent = "새 활동";
+      }
+    }
+
+    async function closeCurrentRoom() {
+      if (!currentTeacherRoom || !teacherUser) {
+        showToast("먼저 내 방을 열어 주세요.");
+        return;
+      }
+      if (!confirm(`활동 코드 ${currentTeacherRoom}의 제출을 종료할까요?\n기존 결과는 그대로 남습니다.`)) return;
+
+      try {
+        await update(ref(db, `${DB_ROOT}/rooms/${currentTeacherRoom}/meta`), {
+          closed: true,
+          closedAt: serverTimestamp()
+        });
+        closeRoomBtn.disabled = true;
+        closeRoomBtn.textContent = "활동 종료됨";
+        setConnection(`활동 코드 ${currentTeacherRoom} · 종료된 활동`, "warn");
+        showToast("활동을 종료했습니다.");
+      } catch (error) {
+        console.error("Room close error:", error);
+        showToast("활동 종료 실패");
+      }
+    }
+
+    async function initMode() {
       const params = new URLSearchParams(window.location.search);
       const isTeacher = params.get("teacher") === "1";
-      const roomFromUrl = sanitizeRoom(params.get("room"));
+      const urlRoom = sanitizeRoom(params.get("room"));
 
       if (isTeacher) {
         document.body.classList.add("teacher-mode");
         studentApp.classList.add("hidden");
         teacherApp.classList.remove("hidden");
+        setConnection("교사 인증 확인 중...");
 
-        if (roomFromUrl) {
-          teacherRoomCode.value = roomFromUrl;
-          openTeacherRoom(roomFromUrl);
-        } else {
-          const newCode = generateRoomCode();
-          teacherRoomCode.value = newCode;
-          openTeacherRoom(newCode);
+        try {
+          await ensureTeacherAuth();
+          if (urlRoom.length === ROOM_CODE_LENGTH) {
+            const opened = await openTeacherRoom(urlRoom);
+            if (!opened) setConnection("내 활동 코드를 입력하거나 새 활동을 만드세요.", "warn");
+          } else {
+            await createAndOpenRoom();
+          }
+        } catch (error) {
+          console.error("Teacher auth init error:", error);
+          setConnection("Firebase Authentication에서 익명 로그인을 먼저 활성화해야 합니다.", "warn");
         }
       } else {
         teacherApp.classList.add("hidden");
         studentApp.classList.remove("hidden");
-        if (roomFromUrl) roomCodeInput.value = roomFromUrl;
+        roomFromLink = urlRoom.length === ROOM_CODE_LENGTH ? urlRoom : "";
+
+        if (roomFromLink) {
+          roomCodeInput.value = roomFromLink;
+          roomInputWrap.classList.add("hidden");
+          linkedRoomCode.textContent = roomFromLink;
+          linkedRoomBox.classList.remove("hidden");
+        } else {
+          roomInputWrap.classList.remove("hidden");
+          linkedRoomBox.classList.add("hidden");
+        }
       }
     }
 
@@ -1382,11 +910,11 @@
     sendBtn.addEventListener("click", sendResult);
     copyBtn.addEventListener("click", copyResult);
 
-    playerNameInput.addEventListener("keydown", (event) => {
+    playerNameInput.addEventListener("keydown", event => {
       if (event.key === "Enter") startGame();
     });
 
-    roomCodeInput.addEventListener("keydown", (event) => {
+    roomCodeInput.addEventListener("keydown", event => {
       if (event.key === "Enter") playerNameInput.focus();
     });
 
@@ -1394,34 +922,39 @@
       running = false;
       cancelAnimationFrame(animationId);
       resetGame();
-      roomCodeInput.value = roomCode || roomCodeInput.value;
       playerNameInput.value = playerName || "";
       show(startScreen);
       playerNameInput.focus();
     });
 
-    openRoomBtn.addEventListener("click", () => openTeacherRoom(teacherRoomCode.value));
+    nextRoundBtn.addEventListener("click", () => {
+      if (round >= TOTAL_ROUNDS) return;
+      round += 1;
+      show(gameScreen);
+      prepareRound();
+    });
 
-    teacherRoomCode.addEventListener("keydown", (event) => {
+    homeBtn.addEventListener("click", () => {
+      running = false;
+      cancelAnimationFrame(animationId);
+      resetGame();
+      playerNameInput.value = playerName || "";
+      show(startScreen);
+    });
+
+    openRoomBtn.addEventListener("click", () => openTeacherRoom(teacherRoomCode.value));
+    teacherRoomCode.addEventListener("keydown", event => {
       if (event.key === "Enter") openTeacherRoom(teacherRoomCode.value);
     });
-
-    newRoomBtn.addEventListener("click", () => {
-      const code = generateRoomCode();
-      teacherRoomCode.value = code;
-      openTeacherRoom(code);
-      showToast(`새 활동 코드 ${code}`);
-    });
-
+    newRoomBtn.addEventListener("click", createAndOpenRoom);
     copyStudentLinkBtn.addEventListener("click", () => {
       if (!studentShareUrl) {
-        showToast("먼저 방을 열어 주세요.");
+        showToast("먼저 내 방을 열어 주세요.");
         return;
       }
       copyText(studentShareUrl, "학생용 주소가 복사되었습니다.");
     });
-
-    clearRoomBtn.addEventListener("click", clearCurrentRoom);
+    closeRoomBtn.addEventListener("click", closeCurrentRoom);
 
     initMode();
   </script>
