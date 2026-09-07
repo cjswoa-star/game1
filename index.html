@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#fffaf0">
-<title>100점에 멈춰라! · 파스텔 손그림 V3</title>
+<title>100점에 멈춰라! · 파스텔 손그림 V4 · SLOT MASTER</title>
 <style>
 :root{
   --paper:#fffaf0; --ink:#463e37; --coral:#f47882; --mint:#72cdb5; --sky:#67bdeb;
@@ -19,50 +19,50 @@ button{cursor:pointer}
 .student-stage{width:min(100%,430px);margin:0 auto;min-height:100vh}
 .student-screen{position:relative;width:100%;aspect-ratio:852/1846;overflow:hidden;background:#fffaf0}
 .plate{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;user-select:none;pointer-events:none}
-.overlay-field,.overlay-button,.dynamic-chip,.dynamic-score,.dynamic-panel,.mini-row{position:absolute;z-index:3}
-.overlay-field input{width:100%;height:100%;border:2px solid rgba(116,160,155,.45);outline:none;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 3px 10px rgba(84,64,44,.08);padding:0 18px;text-align:center;color:#4d4742;font-size:clamp(14px,4.2vw,20px);font-weight:800}
-.overlay-field input:focus{border-color:#70c9b4;box-shadow:0 0 0 4px rgba(112,201,180,.18)}
-.name-field{left:10.5%;top:72.6%;width:79%;height:6.1%}
-.room-field{left:13%;top:65.3%;width:74%;height:5.3%}
+.overlay-field,.overlay-button,.dynamic-chip,.dynamic-score,.dynamic-panel,.mini-row{left:22%;top:78.5%;width:56%;display:flex;gap:7px;justify-content:center}
+.overlay-field input{width:100%;height:100%;border:0;outline:none;border-radius:999px;background:transparent;box-shadow:none;padding:0 18px;text-align:center;color:#5f5750;font-size:clamp(14px,4.2vw,20px);font-weight:900}
+.overlay-field input:focus{box-shadow:inset 0 0 0 3px rgba(112,201,180,.25)}
+.name-field{left:17.5%;top:74.7%;width:65%;height:5.6%}
+.room-field{left:11.2%;top:69.0%;width:77.6%;height:5.1%}
 .room-field input{font-size:clamp(13px,3.9vw,18px)}
 .linked-room{position:absolute;z-index:4;left:27%;top:66.1%;width:46%;padding:6px 10px;border-radius:999px;background:rgba(255,250,225,.94);text-align:center;border:2px dashed rgba(226,168,78,.55);font-weight:800;font-size:clamp(11px,3vw,14px)}
 .linked-room span{margin-right:6px;color:#756454}.linked-room strong{letter-spacing:.08em;color:#e46f72}
-.overlay-button{border:0;border-radius:999px;font-weight:1000;letter-spacing:-.02em;box-shadow:0 5px 0 rgba(103,71,55,.12),0 10px 24px rgba(102,76,50,.12);transition:.12s transform,.12s filter}
+.overlay-button{border:0;border-radius:999px;font-weight:1000;letter-spacing:-.02em;box-shadow:none;transition:.12s transform,.12s filter;background:transparent}
 .overlay-button:active{transform:translateY(3px);filter:saturate(.95)}
 .overlay-button:disabled{opacity:.65;cursor:default}
-.start-button{left:10.5%;top:80.3%;width:79%;height:7.1%;background:rgba(244,120,130,.96);color:white;font-size:clamp(19px,5.3vw,28px)}
+.start-button{left:20.8%;top:82.0%;width:58.4%;height:5.9%;background:transparent;color:white;font-size:clamp(19px,5.3vw,28px);box-shadow:none}
 
 /* game */
 .game-round-title{left:32%;top:6.5%;width:36%;height:6.8%;display:flex;align-items:center;justify-content:center;border-radius:999px;background:#fffaf0;font-weight:1000;font-size:clamp(18px,5vw,26px);z-index:4;position:absolute}
 .game-name{position:absolute;z-index:3;right:7%;top:15%;max-width:46%;padding:5px 10px;border-radius:999px;background:rgba(255,250,226,.90);font-size:clamp(10px,2.7vw,13px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dynamic-score{left:30%;top:39.1%;width:40%;height:12.5%;display:flex;align-items:center;justify-content:center;border-radius:48%;background:radial-gradient(circle,rgba(255,248,235,.99) 0 65%,rgba(255,248,235,.88) 80%,transparent 100%);font-size:clamp(48px,15vw,76px);font-weight:1000;color:#ee6f79;text-shadow:1px 2px 0 rgba(73,61,52,.15)}
+.dynamic-score{left:28.5%;top:36.0%;width:43%;height:18%;display:flex;align-items:center;justify-content:center;border-radius:50%;background:transparent;font-size:clamp(48px,15vw,76px);font-weight:1000;color:#ee6f79;text-shadow:1px 2px 0 rgba(73,61,52,.15)}
 .dynamic-score small{font-size:.32em;margin-left:3px;color:#4c4540}
-.stop-button{left:13%;top:64.1%;width:74%;height:9.2%;background:rgba(244,112,126,.97);color:white;font-size:clamp(26px,7vw,38px)}
+.stop-button{left:13%;top:62.6%;width:74%;height:8.9%;background:transparent;color:white;font-size:clamp(26px,7vw,38px);box-shadow:none}
 .meter{position:absolute;z-index:4;left:22%;top:57.3%;width:56%;height:7px;border-radius:99px;background:rgba(215,215,205,.7);overflow:hidden}
 .meter>div{height:100%;width:0;background:linear-gradient(90deg,#65bce8,#6cd0b3,#ffd36d,#f27782);transition:width .04s linear}
-.mini-row{left:20%;top:74.7%;width:60%;display:flex;gap:6px;justify-content:center}
-.mini{min-width:28%;padding:5px 4px;text-align:center;border-radius:14px;background:rgba(255,255,255,.88);border:1px solid rgba(90,82,72,.12);font-size:clamp(9px,2.4vw,12px)}
+.mini-row{left:22%;top:78.5%;width:56%;display:flex;gap:7px;justify-content:center}
+.mini{min-width:28%;padding:5px 4px;text-align:center;border-radius:14px;background:transparent;border:0;font-size:clamp(9px,2.4vw,12px)}
 .mini span{display:block;color:#9b8d80;font-weight:800}.mini strong{display:block;color:#4b443e;font-size:1.2em}
 
 /* round result */
 .round-result-title{position:absolute;z-index:4;left:19%;top:11.2%;width:62%;padding:6px;text-align:center;border-radius:28px;background:rgba(255,245,214,.94);font-weight:1000;font-size:clamp(20px,5.8vw,30px)}
-.round-result-score{position:absolute;z-index:4;left:25%;top:34%;width:50%;height:15%;display:flex;align-items:center;justify-content:center;border-radius:22px;background:rgba(255,250,239,.96);font-size:clamp(56px,17vw,88px);font-weight:1000;color:#ef727b;text-shadow:2px 2px 0 rgba(90,72,55,.13)}
-.next-button{left:14%;top:77.1%;width:72%;height:8%;background:rgba(91,197,166,.96);color:white;font-size:clamp(22px,6vw,32px)}
+.round-result-score{position:absolute;z-index:4;left:22%;top:29.5%;width:56%;height:18%;display:flex;align-items:center;justify-content:center;border-radius:22px;background:transparent;font-size:clamp(56px,17vw,88px);font-weight:1000;color:#ef727b;text-shadow:2px 2px 0 rgba(90,72,55,.13)}
+.next-button{left:13.5%;top:76.4%;width:73%;height:7.7%;background:transparent;color:white;font-size:clamp(22px,6vw,32px);box-shadow:none}
 
 /* final */
-.final-panel{left:9.5%;top:40.3%;width:81%;height:31.2%;padding:3% 5%;border-radius:24px;background:#fffaf1;border:2px solid rgba(112,195,174,.38);box-shadow:0 10px 24px rgba(87,67,47,.10)}
+.final-panel{left:13%;top:44.4%;width:74%;height:27%;padding:2% 8%;border-radius:0;background:transparent;border:0;box-shadow:none}
 .final-grid{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px;font-size:clamp(14px,4.1vw,20px);font-weight:900}
 .final-grid .lab{color:#81756d}.final-grid .val{font-size:1.08em;color:#3f3934}
 .final-total{margin-top:8px;padding-top:8px;border-top:2px dashed rgba(120,105,93,.22);display:flex;align-items:baseline;justify-content:center;gap:10px;font-weight:1000}
 .final-total span{font-size:clamp(14px,4vw,18px)}.final-total b{font-size:clamp(42px,12vw,66px);color:#ef737c}
 .final-meta{position:absolute;z-index:4;left:13%;top:70.4%;width:74%;text-align:center;font-size:clamp(11px,3.1vw,15px);font-weight:900;color:#6a6059}
-.send-button{left:10.5%;top:76.1%;width:79%;height:7.3%;background:rgba(76,167,236,.96);color:white;font-size:clamp(20px,5.5vw,30px)}
-.again-button{left:16%;top:84.6%;width:68%;height:5.8%;background:rgba(255,255,255,.92);color:#5e7778;border:2px solid rgba(95,173,171,.5);font-size:clamp(14px,4vw,20px);box-shadow:none}
+.send-button{left:12%;top:74.7%;width:76%;height:7.2%;background:transparent;color:white;font-size:clamp(20px,5.5vw,30px);box-shadow:none}
+.again-button{left:16%;top:82.8%;width:68%;height:6.1%;background:transparent;color:#5e7778;border:0;font-size:clamp(14px,4vw,20px);box-shadow:none}
 .copy-link{position:absolute;z-index:4;left:35%;top:91.2%;width:30%;border:0;background:rgba(255,255,255,.75);color:#8a8179;border-radius:999px;font-size:clamp(10px,2.8vw,13px);padding:5px}
 .send-state{position:absolute;z-index:5;left:8%;top:73.2%;width:84%;text-align:center;font-size:clamp(10px,2.8vw,13px);font-weight:900;color:#50747a}
 
 /* sent */
-.home-button{left:10%;top:79.5%;width:80%;height:7.1%;background:rgba(244,120,130,.96);color:white;font-size:clamp(20px,5.4vw,29px)}
+.home-button{left:13%;top:79.0%;width:74%;height:7.3%;background:transparent;color:white;font-size:clamp(20px,5.4vw,29px);box-shadow:none}
 
 /* toast/countdown */
 .toast{position:fixed;left:50%;bottom:22px;z-index:200;transform:translateX(-50%);padding:12px 18px;border-radius:999px;background:#4c4540;color:#fffaf0;font-weight:900;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 20px rgba(0,0,0,.16);white-space:nowrap}.toast.show{opacity:1}
@@ -72,9 +72,9 @@ button{cursor:pointer}
 body.teacher-mode{padding:18px;background:#f7f1e6}
 .teacher-app{width:min(1180px,100%);margin:0 auto;position:relative}
 .teacher-shell{position:relative;overflow:hidden;border-radius:34px;background:rgba(255,251,241,.97);box-shadow:0 20px 50px rgba(83,65,46,.18);border:2px solid rgba(98,174,150,.22);padding:26px}
-.teacher-shell::before{content:"";position:absolute;inset:0;background:url('assets/07_teacher_live.webp') center/cover no-repeat;opacity:.09;pointer-events:none}
+.teacher-shell::before{content:"";position:absolute;inset:0;background:url('assets/06_teacher_slot.webp') center/100% 100% no-repeat;opacity:.16;pointer-events:none}
 .teacher-content{position:relative;z-index:2}
-.teacher-hero{min-height:150px;border-radius:24px;padding:22px 25px;background:linear-gradient(90deg,rgba(255,250,238,.96),rgba(255,250,238,.76)),url('assets/06_teacher_dashboard.webp') center 0/cover no-repeat;border:2px solid rgba(105,191,168,.22);display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.teacher-hero{min-height:150px;border-radius:24px;padding:22px 25px;background:linear-gradient(90deg,rgba(255,250,238,.96),rgba(255,250,238,.76));border:2px solid rgba(105,191,168,.22);display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .teacher-title .eyebrow{font-weight:900;color:#5ca78f;font-size:14px}.teacher-title h1{margin:6px 0 4px;font-size:clamp(28px,4vw,52px);letter-spacing:-.05em}.teacher-title p{margin:0;color:#746a61;font-weight:800}
 .teacher-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.teacher-controls .field{min-width:170px}.teacher-controls label{display:block;font-size:12px;font-weight:900;margin-bottom:5px;color:#766b61}.teacher-controls input{height:48px;border:2px solid rgba(94,165,149,.35);border-radius:14px;background:rgba(255,255,255,.92);padding:0 12px;font-size:20px;font-weight:1000;letter-spacing:.08em;width:170px;text-align:center;outline:none}.teacher-controls button,.teacher-footer button{border:0;border-radius:14px;min-height:48px;padding:0 18px;font-weight:1000;color:#fff;background:#62bfa5;box-shadow:0 4px 0 rgba(82,116,102,.15)}.teacher-controls button.secondary,.teacher-footer button.secondary{background:#f5b76a;color:#4c433d}.teacher-footer button.danger{background:#ef858b}
 .connection{margin:12px 0 2px;padding:9px 12px;border-radius:12px;background:rgba(104,196,172,.11);font-size:13px;font-weight:900;color:#5c746d}.connection.warn{background:rgba(239,133,139,.12);color:#a65e62}.connection.good{background:rgba(102,194,153,.13);color:#4d816d}
@@ -91,7 +91,7 @@ body.teacher-mode{padding:18px;background:#f7f1e6}
 <body>
   <div id="studentApp" class="student-stage">
     <section id="startScreen" class="student-screen">
-      <img class="plate" src="assets/01_start.webp" alt="파스텔 손그림 시작 화면">
+      <img class="plate" src="assets/01_start_slot.webp" alt="파스텔 손그림 시작 화면">
       <div id="roomInputWrap" class="overlay-field room-field">
         <input id="roomCode" type="text" inputmode="numeric" maxlength="6" placeholder="활동 코드 6자리" autocomplete="off">
       </div>
@@ -101,7 +101,7 @@ body.teacher-mode{padding:18px;background:#f7f1e6}
     </section>
 
     <section id="gameScreen" class="student-screen hidden">
-      <img class="plate" src="assets/02_game.webp" alt="파스텔 손그림 게임 화면">
+      <img class="plate" src="assets/02_game_slot.webp" alt="파스텔 손그림 게임 화면">
       <div class="game-round-title"><span id="roundNow">1</span>라운드</div>
       <div class="game-name" id="gameName">참가자</div>
       <div id="numberBox" class="dynamic-score" aria-label="현재 점수"><span id="scoreNumber">0</span><small>점</small></div>
@@ -115,14 +115,14 @@ body.teacher-mode{padding:18px;background:#f7f1e6}
     </section>
 
     <section id="roundResultScreen" class="student-screen hidden">
-      <img class="plate" src="assets/03_round_result.webp" alt="파스텔 손그림 라운드 결과 화면">
+      <img class="plate" src="assets/03_round_result_slot.webp" alt="파스텔 손그림 라운드 결과 화면">
       <div id="roundResultRound" class="round-result-title">1라운드 종료!</div>
       <div id="roundResultScore" class="round-result-score">68점</div>
       <button id="nextRoundBtn" class="overlay-button next-button">다음 라운드</button>
     </section>
 
     <section id="resultScreen" class="student-screen hidden">
-      <img class="plate" src="assets/04_final_result.webp" alt="파스텔 손그림 최종 결과 화면">
+      <img class="plate" src="assets/04_final_result_slot.webp" alt="파스텔 손그림 최종 결과 화면">
       <div class="dynamic-panel final-panel">
         <div class="final-grid">
           <div class="lab">1라운드</div><div class="val" id="r1">0점</div>
@@ -138,11 +138,11 @@ body.teacher-mode{padding:18px;background:#f7f1e6}
       <div id="sendState" class="send-state"></div>
       <button id="sendBtn" class="overlay-button send-button">✈ 선생님께 보내기</button>
       <button id="againBtn" class="overlay-button again-button">↻ 다시 도전하기</button>
-      <button id="copyBtn" class="copy-link">결과 복사</button>
+      <button id="copyBtn" class="copy-link hidden">결과 복사</button>
     </section>
 
     <section id="sendCompleteScreen" class="student-screen hidden">
-      <img class="plate" src="assets/05_send_complete.webp" alt="파스텔 손그림 전송 완료 화면">
+      <img class="plate" src="assets/05_send_complete_slot.webp" alt="파스텔 손그림 전송 완료 화면">
       <button id="homeBtn" class="overlay-button home-button">⌂ 처음으로 돌아가기</button>
     </section>
   </div>
