@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#fffaf0">
-<title>100점에 멈춰라! · Seamless Plate V6</title>
+<title>100점에 멈춰라! · V22 CLEANARC</title>
 <style>
 :root{
   --paper:#fffaf0; --ink:#4a443d; --pink:#f47f8e; --mint:#77c7a8; --blue:#67bdeb; --green:#5ebb92; --line:rgba(74,68,61,.18);
@@ -38,8 +38,8 @@ button,input{font:inherit} button{cursor:pointer}
 .game-round-title{left:27%;top:5.2%;width:46%;height:5.6%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(25px,6.8vw,36px);font-weight:1000;color:#403835}
 .game-name{left:4.2%;top:17.2%;width:18.8%;height:5.5%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(10px,2.6vw,13px);line-height:1.2;font-weight:900;color:#655a54;padding:0 5px;word-break:keep-all}
 .dynamic-score{left:28.5%;top:37.0%;width:43%;height:16.0%;display:flex;align-items:center;justify-content:center;color:#ee7681;font-weight:1000;letter-spacing:-.05em;text-shadow:1px 2px 0 rgba(97,88,78,.10)}
-.dynamic-score span{font-size:clamp(60px,18vw,96px)}
-.dynamic-score small{font-size:clamp(26px,7vw,38px);color:#3f3936;margin-left:4px}
+.dynamic-score span{font-size:clamp(68px,19vw,106px)}
+.dynamic-score small{font-size:clamp(28px,7.2vw,40px);color:#3f3936;margin-left:6px}
 .stop-button{left:11.5%;top:62.0%;width:77%;height:11.0%;border:0;border-radius:999px;background:transparent;color:#ffffff;font-weight:1000;font-size:clamp(28px,7vw,38px);text-shadow:0 2px 0 rgba(121,72,73,.16)}
 .stop-button:disabled{opacity:.65}
 .meter{position:absolute;opacity:0;pointer-events:none}
@@ -133,7 +133,7 @@ body.teacher-mode{padding:18px;background:#f7f1e6}
 
 
 /* =========================================================
-   V6 SEAMLESS PLATE CALIBRATION
+   V6 SEAMLESS PLATE CALIBRATION (legacy, superseded by V7 below)
    - 배경 그림 자체가 UI 표면이 되도록 모든 동적 레이어를 투명화
    - 852x1846 학생용 원본 비율과 1586x992 교사용 원본 비율 고정
    ========================================================= */
@@ -161,7 +161,7 @@ body.teacher-mode{padding:18px;background:#f7f1e6}
 .start-button{left:17.0%;top:85.48%;width:66%;height:6.15%;padding:0!important}
 .game-round-title{left:22.0%;top:4.45%;width:56%;height:6.8%}
 .game-name{left:3.8%;top:16.55%;width:19.6%;height:7.2%}
-.dynamic-score{left:24.5%;top:35.2%;width:51%;height:20.0%}
+.dynamic-score{left:24.0%;top:35.0%;width:52%;height:20.5%}
 .stop-button{left:11.3%;top:62.05%;width:77.4%;height:10.9%;padding:0!important}
 .mini-row{left:10.4%;top:74.35%;width:79.2%;height:9.5%}
 .round-result-title{left:11.0%;top:10.55%;width:78%;height:10.5%}
@@ -261,6 +261,571 @@ body.teacher-mode{
   .teacher-stage{width:1100px}
 }
 
+
+/* =========================================================
+   V7 PIXEL-FIT — generated plates are the source of truth
+   852x1846 student / 1536x1024 teacher
+   No white capsules, no blur, no replacement shapes.
+   ========================================================= */
+:root{--ui-ink:#4b433d;--ui-pink:#ef7680;--ui-teal:#58aaa0;--ui-blue:#4daeea}
+html,body{font-family:"NanumSquareRound","NanumSquare","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif}
+.student-stage{width:min(100%,430px);margin:0 auto;background:#f4efe5}
+.student-screen{aspect-ratio:852/1846;background:#fffaf0}
+.plate{object-fit:fill}
+.overlay-field,.overlay-button,.game-round-title,.game-name,.dynamic-score,.round-result-title,.round-result-score,.result-score-row,.result-final-value,.final-meta,#gradeText,.linked-room,
+.teacher-overlay,.teacher-room-control,.teacher-stats .stat,.teacher-ranking,.teacher-distribution-title,.dist-wrap,.teacher-connection-panel,.teacher-share-panel{
+  background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;border:none!important
+}
+.overlay-field,.game-round-title,.game-name,.dynamic-score,.round-result-title,.round-result-score,.result-score-row,.result-final-value,.final-meta{padding:0!important}
+.overlay-field input{background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important}
+.linked-room{display:none!important}
+
+/* Start — exact blank-slot fit */
+.room-field{left:12.15%;top:72.18%;width:75.70%;height:6.15%}
+.code-slots{gap:1.65%;padding:0 .8%}
+.code-slots span{font-family:"NanumSquareRound",sans-serif;font-size:clamp(25px,7.0vw,31px);font-weight:800;color:#504943;line-height:1}
+.slot-capture{opacity:.012}
+.name-field{left:13.0%;top:79.15%;width:74.0%;height:5.35%;padding:0!important}
+.overlay-field input{font-size:clamp(18px,5.0vw,22px);font-weight:800;color:#514a44;letter-spacing:-.02em}
+.overlay-field input::placeholder{color:rgba(81,74,68,.42)}
+.start-button{left:16.25%;top:85.45%;width:67.5%;height:6.25%;padding:0!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff;font-size:clamp(23px,6.6vw,29px);font-weight:800;letter-spacing:-.03em;text-shadow:0 1px 1px rgba(116,69,70,.22)}
+.start-button:active{transform:translateY(1px) scale(.995)}
+
+/* Game — cloud, gauge center, red pill, 3 mini medals */
+.game-round-title{left:18%;top:3.9%;width:64%;height:5.1%;display:flex;align-items:center;justify-content:center;font-size:clamp(25px,7.4vw,32px);font-weight:800;color:#4b433d;line-height:1;letter-spacing:-.04em}
+.game-name{left:25%;top:9.0%;width:50%;height:3.3%;display:flex;align-items:center;justify-content:center;font-size:clamp(13px,4.0vw,17px);font-weight:800;color:#766b62;line-height:1;padding:0!important;word-break:keep-all}
+.dynamic-score{left:18.8%;top:36.0%;width:62.4%;height:15.4%;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--ui-pink);font-weight:800;letter-spacing:-.055em;text-shadow:1px 1px 0 rgba(91,75,66,.08)}
+.dynamic-score span{font-size:clamp(84px,23vw,102px);line-height:.92}
+.dynamic-score small{font-size:clamp(25px,7.0vw,30px);font-weight:800;color:#49413b;margin:14px 0 0 0;line-height:1}
+.stop-button{left:12.2%;top:64.15%;width:75.6%;height:8.55%;padding:0!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff;font-size:clamp(25px,7.2vw,31px);font-weight:800;letter-spacing:-.03em;text-shadow:0 1px 1px rgba(126,67,71,.2)}
+.mini-row{left:8.15%;top:73.82%;width:83.7%;height:10.95%;display:grid!important;grid-template-columns:repeat(3,1fr);gap:2.9%}
+.mini{position:relative;background:transparent!important;border:0!important;padding:0!important}
+.mini span{top:0%;height:26%;font-size:clamp(12px,3.7vw,16px);font-weight:800;color:#625850}
+.mini strong{top:31%;height:64%;font-size:clamp(21px,6.2vw,27px);font-weight:800;color:#4a433e;line-height:1}
+
+/* Round result — title on ribbon, score centered on notebook */
+.round-result-title{left:11.5%;top:12.1%;width:77%;height:6.2%;display:flex;align-items:center;justify-content:center;font-size:clamp(25px,7.2vw,31px);font-weight:800;color:#453d37;letter-spacing:-.035em;line-height:1}
+.round-result-score{left:18%;top:30.0%;width:64%;height:12.5%;display:flex;align-items:center;justify-content:center;font-size:clamp(67px,19.5vw,84px);font-weight:800;color:var(--ui-pink);letter-spacing:-.045em;line-height:1;text-shadow:1px 1px 0 rgba(90,72,55,.08)}
+.next-button{left:13.3%;top:80.15%;width:73.4%;height:7.75%;padding:0!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff;font-size:clamp(22px,6.4vw,28px);font-weight:800;letter-spacing:-.03em;text-shadow:0 1px 1px rgba(50,105,94,.28)}
+
+/* Final result — top cloud copy, line-aligned scores, yellow average cloud */
+.result-name{display:none!important}
+#gradeText{position:absolute;z-index:4;left:15%;top:10.55%;width:70%;height:4.8%;display:flex;align-items:center;justify-content:center;text-align:center;background:transparent!important;font-size:clamp(23px,6.8vw,29px);font-weight:800;color:#4a423c;line-height:1.05;letter-spacing:-.035em;padding:0!important}
+.final-meta{left:14%;top:15.55%;width:72%;height:4.3%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(14px,4.2vw,18px);font-weight:800;color:#756a61;line-height:1.18;letter-spacing:-.025em;padding:0!important}
+.result-score-row{left:40.5%;width:28.0%;height:4.45%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(22px,6.3vw,27px);font-weight:800;color:#413a35;line-height:1;padding:0!important}
+.result-r1{top:46.25%}.result-r2{top:51.30%}.result-r3{top:56.35%}
+.result-final-value{left:27%;top:62.0%;width:46%;height:8.9%;display:flex;align-items:center;justify-content:center;gap:3px;color:var(--ui-pink);font-weight:800;letter-spacing:-.055em;padding:0!important}
+.result-final-value b{font-size:clamp(52px,15.6vw,67px);line-height:1}
+.result-final-value span{font-size:clamp(24px,7vw,30px);color:#453d37;margin-top:10px;line-height:1}
+.send-button{left:10.7%;top:77.55%;width:78.6%;height:7.65%;padding:0!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff;font-size:clamp(21px,6.0vw,26px);font-weight:800;letter-spacing:-.03em;text-shadow:0 1px 1px rgba(41,103,154,.25)}
+.again-button{left:16.6%;top:85.75%;width:66.8%;height:5.75%;padding:0!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#65aeb1;font-size:clamp(17px,4.9vw,21px);font-weight:800;letter-spacing:-.03em}
+.copy-link,.send-state{display:none!important}
+
+/* Send complete */
+.home-button{left:12.3%;top:79.2%;width:75.4%;height:9.2%;padding:0!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff;font-size:clamp(22px,6.4vw,28px);font-weight:800;letter-spacing:-.035em;text-shadow:0 1px 1px rgba(123,69,70,.22)}
+
+/* Teacher plate — actual generated 1536 x 1024 */
+body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x:auto}
+.teacher-app{width:100%;margin:0;position:relative}
+.teacher-stage{position:relative;width:min(100vw,1536px);min-width:1024px;aspect-ratio:1536/1024;margin:0 auto;overflow:hidden;background:#fffaf0}
+.teacher-plate{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;display:block;pointer-events:none;user-select:none}
+.teacher-ribbon{left:30.0%;top:14.25%;width:22.7%;height:6.0%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(17px,1.55vw,24px);font-weight:800;color:#4c433d;letter-spacing:-.035em;line-height:1}
+.teacher-room-control{position:absolute;z-index:4;left:53.6%;top:14.25%;width:16.5%;height:6.15%;display:flex;align-items:center;gap:1.5%;padding:0 1.1%}
+.teacher-room-control input{flex:1;min-width:0;height:76%;border:0!important;outline:0!important;background:transparent!important;text-align:center;font-family:inherit;font-size:clamp(16px,1.3vw,20px);font-weight:800;color:#4c433d;letter-spacing:.13em;padding-left:.13em}
+.teacher-room-control button{flex:0 0 auto;border:0!important;background:transparent!important;color:#3f8e78;font-size:clamp(11px,.88vw,14px);font-weight:800;padding:2px 3px}
+.teacher-new-room{position:absolute;z-index:4;left:87.4%;top:20.4%;width:9.2%;height:3.4%;border:0!important;background:transparent!important;color:#5c524a;font-size:clamp(11px,.92vw,15px);font-weight:800;padding:0;text-align:center;white-space:nowrap}
+.teacher-new-room::before{content:"+ ";color:#ef7882}
+
+.teacher-stats .stat{position:absolute;z-index:3;top:25.15%;height:10.7%;padding:0!important;background:transparent!important;border:0!important;text-align:center}
+.teacher-stats .stat span{display:block;margin:0;font-size:clamp(12px,1.02vw,16px);font-weight:800;color:#71675f;white-space:nowrap;line-height:1.15}
+.teacher-stats .stat strong{display:block;margin-top:.55vw;font-size:clamp(28px,2.45vw,38px);font-weight:800;color:#403934;line-height:1}
+.teacher-stats .stat:nth-child(1){left:20.9%;width:10.4%}
+.teacher-stats .stat:nth-child(2){left:41.4%;width:10.5%}
+.teacher-stats .stat:nth-child(3){left:62.1%;width:10.7%}
+.teacher-stats .stat:nth-child(4){left:84.4%;width:10.6%}
+
+.teacher-ranking{position:absolute;z-index:3;left:12.45%;top:39.25%;width:37.75%;height:47.1%;overflow:hidden}
+.teacher-ranking-title{position:absolute;left:3.0%;top:1.0%;height:6.7%;display:flex;align-items:center;padding-left:3.8%;font-size:clamp(15px,1.22vw,19px);font-weight:800;color:#423b36;line-height:1}
+.teacher-table-wrap{position:absolute;left:2.8%;top:10.5%;width:94.1%;height:86.5%;max-height:none;overflow:auto;padding:0}
+#resultTable{width:100%;border-collapse:collapse;background:transparent;font-size:clamp(10px,.82vw,13px);table-layout:fixed}
+#resultTable th,#resultTable td{height:2.75em;padding:.42em .35em;border-bottom:1px solid rgba(74,68,61,.105);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:transparent;color:#4c443f}
+#resultTable th{font-size:clamp(9px,.74vw,12px);font-weight:800;color:#746961}
+#resultTable th:nth-child(1),#resultTable td:nth-child(1){width:9%;text-align:center}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){width:23%}
+#resultTable th:nth-child(3),#resultTable td:nth-child(3){width:14%;text-align:center}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){width:34%;text-align:center}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){width:20%;text-align:center}
+#resultTable td.rank{font-weight:800;color:#ef7680}
+.teacher-ranking .empty-state{position:absolute;left:5%;right:5%;top:22%;bottom:10%;display:flex;align-items:center;justify-content:center;text-align:center;background:transparent!important;color:#887c72;font-size:clamp(12px,1.0vw,16px);font-weight:800}
+
+.teacher-distribution-title{position:absolute;z-index:3;left:53.1%;top:40.2%;width:18%;height:4%;display:flex;align-items:center;padding-left:2.1%;font-size:clamp(15px,1.22vw,19px);font-weight:800;color:#423b36;line-height:1}
+.dist-wrap{position:absolute;z-index:3;left:55.6%;top:46.0%;width:37.0%;height:15.1%;min-height:0;padding:0;display:flex;align-items:flex-end;gap:2.3%}
+.dist-col{position:relative;flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px}
+.dist-count{font-size:clamp(9px,.70vw,11px);font-weight:800;color:#4a433d;line-height:1}
+.dist-bar{width:56%;max-width:none;min-height:4px;border-radius:10px;background:linear-gradient(180deg,rgba(103,189,235,.85),rgba(94,187,146,.85));transition:height .2s ease}
+.dist-label{font-size:clamp(8px,.62vw,10px);color:#756b63;font-weight:800;white-space:nowrap;line-height:1.1}
+
+.teacher-connection-panel{position:absolute;z-index:3;left:51.3%;top:68.1%;width:22.8%;height:18.1%;display:flex;align-items:center;justify-content:center;text-align:center;padding:2.0% 1.9%}
+.connection{margin:0;padding:0;background:transparent!important;border:0!important;border-radius:0!important;font-size:clamp(12px,1.05vw,16px);font-weight:800;color:#6a6058;line-height:1.45;letter-spacing:-.02em}
+.connection.good{color:#3e8f70}.connection.warn{color:#b26a47}
+.teacher-share-panel{position:absolute;z-index:3;left:74.4%;top:68.1%;width:23.9%;height:18.2%}
+.share-box{position:absolute;left:5.2%;top:1.6%;width:89.5%;height:12%;padding:0;background:transparent!important;border:0!important;border-radius:0!important;font-size:clamp(8px,.68vw,10.5px);font-weight:800;color:#665d56;line-height:1.25;overflow:hidden;word-break:break-all}
+.teacher-room-badge{position:absolute;left:4.8%;top:28.0%;width:32%;height:61%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#5f6c72;font-weight:800;pointer-events:none}
+.teacher-room-badge span{font-size:clamp(9px,.72vw,11px);font-weight:800;color:#86a3aa}
+.teacher-room-badge strong{font-size:clamp(16px,1.35vw,21px);font-weight:800;letter-spacing:.04em;color:#55666b;margin-top:.18em}
+.teacher-footer{position:absolute;left:43.0%;top:28.0%;width:52.7%;height:61%;display:grid;grid-template-rows:1fr 1fr;gap:10%;margin:0}
+.teacher-footer button{height:auto;padding:0;border:0!important;border-radius:12px!important;background:transparent!important;box-shadow:none!important;font-size:clamp(11px,.88vw,14px);font-weight:800;color:#5799bd;letter-spacing:-.02em}
+.teacher-footer button.danger{color:#d66f78}.teacher-footer button:disabled{opacity:.48}
+.teacher-note{display:none!important}
+
+@media(max-width:1024px){.teacher-stage{width:1024px}}
+
+
+/* V7.1 final micro-calibration after browser screenshot QA */
+.teacher-room-control{width:17.3%;gap:1.0%;padding:0 .9%}
+.teacher-room-control input{font-size:clamp(15px,1.22vw,19px);letter-spacing:.10em}
+.teacher-room-control button{font-size:clamp(10px,.78vw,12.5px);white-space:nowrap}
+.teacher-room-control .teacher-new-room{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;flex:0 0 auto!important;color:#d8707b!important;font-size:clamp(10px,.78vw,12.5px)!important;padding:2px 2px!important}
+.teacher-room-control .teacher-new-room::before{content:"+ ";color:#ef7882}
+.teacher-ranking-title{left:12.0%;padding-left:0}
+.share-box{left:13.2%;top:1.5%;width:81.5%;height:17%;font-size:clamp(8px,.66vw,10px);line-height:1.1}
+
+
+
+/* V8 MICRO-FIT — final typography/pixel calibration after review */
+.room-field{left:13.55%;top:72.16%;width:72.90%;height:6.18%}
+.code-slots{gap:1.12%;padding:0 1.55%}
+.code-slots span{font-size:clamp(25px,6.7vw,30px);font-weight:900;color:#4f4741}
+.name-field{left:13.1%;top:79.12%;width:73.9%;height:5.42%}
+.overlay-field input{font-size:clamp(18px,4.95vw,22px);font-weight:900;color:#514a44}
+.start-button,.stop-button,.next-button,.send-button,.again-button,.home-button{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box;line-height:1!important;padding:0!important;font-weight:900!important;letter-spacing:-.035em}
+.start-button,.stop-button,.next-button,.send-button,.home-button{padding-top:.17em!important}
+.again-button{padding-top:.11em!important;font-weight:900!important}
+.start-button{font-size:clamp(24px,6.7vw,30px);text-shadow:0 1px 1px rgba(116,69,70,.28)}
+.stop-button{font-size:clamp(26px,7.3vw,32px);text-shadow:0 1px 1px rgba(126,67,71,.24)}
+.next-button{font-size:clamp(23px,6.5vw,29px);text-shadow:0 1px 1px rgba(50,105,94,.32)}
+.send-button{font-size:clamp(22px,6.15vw,27px);text-shadow:0 1px 1px rgba(41,103,154,.28)}
+.again-button{font-size:clamp(17px,4.95vw,21.5px)}
+.home-button{font-size:clamp(23px,6.5vw,29px);text-shadow:0 1px 1px rgba(123,69,70,.28)}
+
+.teacher-ribbon{font-size:clamp(18px,1.62vw,25px);font-weight:900}
+.teacher-room-control{left:53.35%;top:14.18%;width:18.9%;height:6.2%;display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:3.0%;padding:0 .9%}
+.teacher-room-control input{height:76%;font-size:clamp(17px,1.38vw,21px);font-weight:900;letter-spacing:.10em;color:#4d463f}
+.teacher-room-control button{height:auto;border:0!important;background:transparent!important;font-size:clamp(12px,.96vw,15px)!important;font-weight:900!important;line-height:1!important;white-space:nowrap;padding-top:.08em!important}
+#openRoomBtn{color:#678574!important}
+.teacher-room-control .teacher-new-room{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;flex:auto!important;color:#d6707b!important;font-size:clamp(12px,.96vw,15px)!important;font-weight:900!important;padding-top:.08em!important}
+.teacher-room-control .teacher-new-room::before{content:'+ ';color:#ef7882}
+
+.teacher-stats .stat{top:24.95%;height:11.05%}
+.teacher-stats .stat span{font-size:clamp(14px,1.14vw,18px);font-weight:900;line-height:1.1}
+.teacher-stats .stat strong{margin-top:.45vw;font-size:clamp(31px,2.56vw,40px);font-weight:900;line-height:1}
+.teacher-stats .stat:nth-child(1){left:20.4%;width:11.2%}
+.teacher-stats .stat:nth-child(2){left:40.95%;width:11.5%}
+.teacher-stats .stat:nth-child(3){left:61.8%;width:11.8%}
+.teacher-stats .stat:nth-child(4){left:83.1%;width:12.6%}
+
+.teacher-ranking{left:12.35%;top:39.15%;width:38.0%;height:47.3%}
+.teacher-ranking-title{left:11.0%;top:1.25%;font-size:clamp(16px,1.28vw,20px);font-weight:900}
+.teacher-table-wrap{left:2.45%;top:10.0%;width:94.9%;height:86.9%}
+#resultTable{font-size:clamp(11px,.88vw,14px)}
+#resultTable th,#resultTable td{height:3.02em;padding:.54em .44em;vertical-align:middle;line-height:1.25}
+#resultTable th{font-size:clamp(10px,.78vw,12.5px);font-weight:900}
+#resultTable th:nth-child(1),#resultTable td:nth-child(1){width:9%}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){width:25%}
+#resultTable th:nth-child(3),#resultTable td:nth-child(3){width:14%}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){width:31%}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){width:21%}
+
+.teacher-distribution-title{top:40.15%;font-size:clamp(16px,1.28vw,20px);font-weight:900}
+.dist-wrap{left:55.2%;top:45.85%;width:37.5%;height:15.6%;gap:1.8%}
+.dist-count{font-size:clamp(10px,.78vw,12.5px);font-weight:900}
+.dist-label{font-size:clamp(10px,.79vw,12px);font-weight:900;line-height:1.05}
+.dist-bar{width:59%}
+
+.teacher-connection-panel{left:51.15%;top:68.05%;width:22.9%;height:18.3%;padding:1.75% 1.6%}
+.connection{font-size:clamp(14px,1.12vw,17px);font-weight:900;line-height:1.36}
+.teacher-share-panel{left:74.15%;top:68.0%;width:24.15%;height:18.45%}
+.share-box{left:12.4%;top:1.05%;width:82.6%;height:16.2%;font-size:clamp(9px,.76vw,11.5px);font-weight:900;line-height:1.16;word-break:break-all}
+.teacher-room-badge{left:4.5%;top:24.5%;width:33.5%;height:65.5%}
+.teacher-room-badge span{font-size:clamp(10px,.8vw,12px);font-weight:900}
+.teacher-room-badge strong{font-size:clamp(18px,1.52vw,23px);font-weight:900;letter-spacing:.03em;margin-top:.12em}
+.teacher-footer{left:40.8%;top:25.4%;width:56.8%;height:63.2%;gap:8.2%}
+.teacher-footer button{display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(13px,.98vw,15.2px);font-weight:900;line-height:1.12;padding-top:.06em!important}
+
+
+
+/* V9 HARDFIT — strong correction pass after explicit visual review */
+.room-field{left:15.7%;top:72.18%;width:68.9%;height:6.12%}
+.code-slots{gap:.35%;padding:0 1.55%}
+.code-slots span{font-size:clamp(25px,6.45vw,29px)!important;font-weight:900!important;color:#4e4741!important}
+.name-field{left:13.2%;top:79.12%;width:73.8%;height:5.36%}
+.overlay-field input{font-size:clamp(18px,4.9vw,22px)!important;font-weight:900!important}
+.start-button,.stop-button,.next-button,.send-button,.again-button,.home-button{display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;font-weight:900!important;letter-spacing:-.04em!important;transform:translateY(1.6px)}
+.start-button{font-size:clamp(24px,6.8vw,30px)!important}
+.stop-button{font-size:clamp(26px,7.35vw,32px)!important}
+.next-button{font-size:clamp(23px,6.55vw,29px)!important}
+.send-button{font-size:clamp(22px,6.2vw,27px)!important}
+.again-button{font-size:clamp(17.5px,5.0vw,22px)!important;transform:translateY(1.2px)}
+.home-button{font-size:clamp(23px,6.55vw,29px)!important}
+
+.teacher-ribbon{left:29.55%;top:14.18%;width:23.7%;font-size:clamp(19px,1.72vw,26px)!important;font-weight:900!important}
+.teacher-room-control{left:53.0%!important;top:14.1%!important;width:19.8%!important;height:6.45%!important;display:block!important;padding:0!important}
+.teacher-room-control input{position:absolute!important;left:4.2%!important;top:14%!important;width:55%!important;height:72%!important;font-size:clamp(18px,1.46vw,22px)!important;font-weight:900!important;letter-spacing:.08em!important;color:#4a433d!important}
+#openRoomBtn{position:absolute!important;left:66.8%!important;top:25%!important;width:auto!important;height:auto!important;font-size:clamp(13px,1.05vw,16px)!important;font-weight:900!important;line-height:1!important;color:#6a816f!important;white-space:nowrap!important;padding:0!important}
+#newRoomBtn.teacher-new-room{position:absolute!important;left:79.2%!important;top:25%!important;width:auto!important;height:auto!important;font-size:clamp(13px,1.05vw,16px)!important;font-weight:900!important;line-height:1!important;color:#e1737f!important;white-space:nowrap!important;padding:0!important}
+#newRoomBtn.teacher-new-room::before{content:'+ ';color:#ef7882}
+
+.teacher-stats .stat{top:24.85%!important;height:11.35%!important}
+.teacher-stats .stat span{font-size:clamp(16px,1.28vw,20px)!important;font-weight:900!important;line-height:1.08!important;color:#6e655e!important}
+.teacher-stats .stat strong{margin-top:.34vw!important;font-size:clamp(34px,2.78vw,44px)!important;font-weight:900!important;color:#403934!important;line-height:1!important}
+.teacher-stats .stat:nth-child(1){left:20.2%!important;width:11.8%!important}
+.teacher-stats .stat:nth-child(2){left:40.75%!important;width:11.8%!important}
+.teacher-stats .stat:nth-child(3){left:61.6%!important;width:11.9%!important}
+.teacher-stats .stat:nth-child(4){left:82.7%!important;width:13.0%!important}
+
+.teacher-ranking{left:12.25%!important;top:39.12%!important;width:38.3%!important;height:47.5%!important}
+.teacher-ranking-title{left:10.7%!important;top:1.15%!important;font-size:clamp(17px,1.34vw,21px)!important;font-weight:900!important}
+.teacher-table-wrap{left:2.4%!important;top:9.7%!important;width:95.0%!important;height:87.3%!important}
+#resultTable{font-size:clamp(11.5px,.93vw,14.5px)!important}
+#resultTable th,#resultTable td{height:3.28em!important;padding:.62em .5em!important;vertical-align:middle!important;line-height:1.28!important}
+#resultTable th{font-size:clamp(10.5px,.84vw,13px)!important;font-weight:900!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){width:26%!important}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){width:30%!important}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){width:21%!important}
+
+.teacher-distribution-title{left:53.0%!important;top:40.0%!important;font-size:clamp(17px,1.36vw,21px)!important;font-weight:900!important}
+.dist-wrap{left:55.0%!important;top:45.75%!important;width:37.7%!important;height:16.0%!important;gap:1.6%!important}
+.dist-count{font-size:clamp(11px,.88vw,13.5px)!important;font-weight:900!important}
+.dist-label{font-size:clamp(11px,.88vw,13px)!important;font-weight:900!important;line-height:1.0!important}
+.dist-bar{width:61%!important}
+
+.teacher-connection-panel{left:51.05%!important;top:67.95%!important;width:23.2%!important;height:18.55%!important;padding:1.6% 1.5%!important}
+.connection{font-size:clamp(15px,1.22vw,18px)!important;font-weight:900!important;line-height:1.34!important}
+.teacher-share-panel{left:74.0%!important;top:67.95%!important;width:24.35%!important;height:18.55%!important}
+.share-box{left:11.8%!important;top:1.2%!important;width:83.2%!important;height:17.5%!important;font-size:clamp(10px,.82vw,12px)!important;font-weight:900!important;line-height:1.18!important;letter-spacing:-.015em!important}
+.teacher-room-badge{left:3.9%!important;top:23.0%!important;width:34.8%!important;height:67.5%!important}
+.teacher-room-badge span{font-size:clamp(11px,.88vw,13px)!important;font-weight:900!important}
+.teacher-room-badge strong{font-size:clamp(20px,1.68vw,25px)!important;font-weight:900!important;letter-spacing:.02em!important;margin-top:.08em!important}
+.teacher-footer{left:39.5%!important;top:23.2%!important;width:58.5%!important;height:67.5%!important;gap:6.5%!important}
+.teacher-footer button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:clamp(14px,1.08vw,16.5px)!important;font-weight:900!important;line-height:1.08!important;letter-spacing:-.03em!important;padding:0 1%!important}
+
+
+
+/* V10 REFINED — fix remaining teacher panel fitting issues */
+#openRoomBtn{left:67.8%!important;font-size:clamp(12px,.98vw,15px)!important}
+#newRoomBtn.teacher-new-room{left:81.0%!important;font-size:clamp(12px,.98vw,15px)!important}
+.teacher-stats .stat span{font-size:clamp(15px,1.22vw,19px)!important}
+.teacher-distribution-title{top:40.05%!important}
+.dist-label{font-size:clamp(10.5px,.84vw,12.4px)!important}
+.share-box{left:10.8%!important;top:1.0%!important;width:84.0%!important;height:16.6%!important;font-size:clamp(9.6px,.79vw,11.4px)!important;line-height:1.12!important}
+.teacher-room-badge{left:4.4%!important;top:24.0%!important;width:33.5%!important;height:66.0%!important}
+.teacher-footer{left:41.0%!important;top:24.2%!important;width:56.5%!important;height:65.2%!important;display:block!important}
+.teacher-footer button{position:absolute!important;left:0!important;width:100%!important;height:34%!important;display:flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;font-size:clamp(12px,.95vw,14.4px)!important;letter-spacing:-.055em!important;padding:0 .5%!important}
+#copyStudentLinkBtn{top:9%!important}
+#closeRoomBtn{top:56%!important}
+.connection{font-size:clamp(14px,1.16vw,17px)!important}
+
+
+
+/* V11 EXACTFIT — targeted corrections from 21:23 review */
+/* Student: mini round labels lower/larger */
+.mini span{top:7%!important;height:31%!important;font-size:clamp(14px,4.35vw,18.5px)!important;font-weight:900!important;line-height:1!important}
+.mini strong{top:40%!important;height:56%!important;font-size:clamp(21px,6.2vw,27px)!important}
+/* Student: optical vertical centering per button */
+.next-button{transform:translateY(-2.4px)!important}
+.send-button{transform:translateY(-2.2px)!important}
+.again-button{transform:translateY(-1.7px)!important}
+.home-button{transform:translateY(3.4px)!important}
+
+/* Teacher top activity-code pill: keep ALL text inside mint pill */
+.teacher-room-control{left:53.25%!important;top:14.10%!important;width:16.85%!important;height:6.35%!important;display:block!important;padding:0!important}
+.teacher-room-control input{position:absolute!important;left:1.0%!important;top:13%!important;width:55.0%!important;height:74%!important;font-size:clamp(17px,1.38vw,21px)!important;font-weight:900!important;letter-spacing:.08em!important;text-align:center!important}
+#openRoomBtn{position:absolute!important;left:59.0%!important;top:28%!important;width:13.0%!important;height:44%!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:clamp(12px,.95vw,14.5px)!important;font-weight:900!important;line-height:1!important;padding:0!important;color:#627d6d!important}
+#newRoomBtn.teacher-new-room{position:absolute!important;left:72.5%!important;top:28%!important;width:26.0%!important;height:44%!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:clamp(11.5px,.92vw,14px)!important;font-weight:900!important;line-height:1!important;padding:0!important;color:#dc727e!important;white-space:nowrap!important}
+#newRoomBtn.teacher-new-room::before{content:'+ ';color:#ef7882}
+
+/* Teacher ranking: align rows to illustrated paper grid */
+.teacher-ranking{left:12.25%!important;top:39.12%!important;width:38.3%!important;height:47.5%!important}
+.teacher-ranking-title{left:10.7%!important;top:1.15%!important}
+.teacher-table-wrap{left:2.4%!important;top:9.9%!important;width:95.0%!important;height:87.0%!important}
+#resultTable{font-size:clamp(11px,.88vw,13.8px)!important}
+#resultTable th{height:2.45vw!important;padding:0 .44vw!important;vertical-align:middle!important;line-height:1.05!important;font-size:clamp(10px,.8vw,12.6px)!important;font-weight:900!important}
+#resultTable td{height:2.20vw!important;padding:0 .44vw!important;vertical-align:middle!important;line-height:1.05!important;font-size:clamp(11px,.88vw,13.8px)!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){padding-left:1.15vw!important}
+#resultTable th:nth-child(1),#resultTable td:nth-child(1){width:9%!important;text-align:center!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){width:26%!important}
+#resultTable th:nth-child(3),#resultTable td:nth-child(3){width:14%!important;text-align:center!important}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){width:30%!important;text-align:center!important}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){width:21%!important;text-align:center!important}
+
+/* Teacher graph: x labels larger and lower */
+.dist-wrap{left:55.0%!important;top:45.75%!important;width:37.7%!important;height:16.2%!important;gap:1.6%!important}
+.dist-label{font-size:clamp(11.5px,.93vw,13.6px)!important;font-weight:900!important;line-height:1!important;transform:translateY(4px)!important}
+.dist-count{font-size:clamp(11px,.86vw,13px)!important;font-weight:900!important}
+
+/* Teacher lower-right share panel */
+.teacher-share-panel{left:74.0%!important;top:67.95%!important;width:24.35%!important;height:18.55%!important}
+.share-box{left:16.0%!important;top:2.0%!important;width:78.5%!important;height:16.0%!important;font-size:clamp(10px,.8vw,11.8px)!important;font-weight:900!important;line-height:1.12!important;letter-spacing:-.015em!important;overflow:hidden!important}
+.teacher-room-badge{left:4.4%!important;top:24.5%!important;width:33.5%!important;height:65.0%!important;transform:translateY(2px)!important}
+.teacher-room-badge span{font-size:clamp(10.5px,.84vw,12.5px)!important;font-weight:900!important}
+.teacher-room-badge strong{font-size:clamp(18.5px,1.52vw,23px)!important;font-weight:900!important;letter-spacing:.02em!important;margin-top:.10em!important}
+.teacher-footer{left:41.0%!important;top:24.2%!important;width:56.5%!important;height:65.2%!important;display:block!important}
+.teacher-footer button{position:absolute!important;left:0!important;width:100%!important;height:34%!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:nowrap!important;font-size:clamp(13px,1.01vw,15.3px)!important;font-weight:900!important;line-height:1!important;letter-spacing:-.045em!important;padding:0 .5%!important}
+#copyStudentLinkBtn{top:9%!important;transform:translateY(1px)!important}
+#closeRoomBtn{top:56%!important;transform:translateY(-1px)!important}
+
+
+
+/* V12 FINALPOLISH — direct fixes from latest pinpoint review */
+/* 화면1: 코드번호/이름/게임시작하기 살짝 아래 */
+.room-field{top:72.52%!important}
+.name-field{top:79.28%!important}
+.start-button{transform:translateY(2.7px)!important}
+
+/* 화면2: 1R/2R/3R 아래 점수 살짝 위로 + 중앙정렬 */
+.mini strong{
+  top:34.5%!important;
+  height:58%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  text-align:center!important;
+  font-size:clamp(20px,5.9vw,26px)!important;
+  letter-spacing:-.02em!important;
+}
+
+/* 화면4: 라운드별 점수와 버튼 미세 상향 */
+.result-r1{top:45.05%!important}
+.result-r2{top:50.25%!important}
+.result-r3{top:55.45%!important}
+.send-button{transform:translateY(-3.2px)!important}
+.again-button{transform:translateY(-2.3px)!important}
+
+/* 화면5: 처음으로 돌아가기 살짝 더 아래 */
+.home-button{transform:translateY(4.5px)!important}
+
+/* 화면6: 실시간 랭킹 표 정렬 재보정 */
+.teacher-table-wrap{left:2.3%!important;top:9.95%!important;width:95.2%!important;height:86.9%!important}
+#resultTable th,#resultTable td{padding:0 .34vw!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){
+  width:26%!important;
+  padding-left:1.55vw!important;
+  text-align:left!important;
+}
+#resultTable th:nth-child(3),#resultTable td:nth-child(3){
+  width:13.5%!important;
+  text-align:center!important;
+  transform:translateX(-.28vw)!important;
+}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){
+  width:31.5%!important;
+  text-align:left!important;
+  padding-left:.75vw!important;
+}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){
+  width:20%!important;
+  text-align:center!important;
+}
+
+/* 활동 코드 카드 안 숫자 맞춤 */
+.teacher-room-badge{top:24.0%!important;height:64.6%!important;transform:translateY(0)!important}
+.teacher-room-badge span{font-size:clamp(10px,.8vw,12px)!important}
+.teacher-room-badge strong{
+  font-size:clamp(17.2px,1.42vw,21.5px)!important;
+  letter-spacing:.015em!important;
+  margin-top:.04em!important;
+  line-height:1!important;
+}
+
+/* 학생용 주소 복사 / 활동 종료 버튼 텍스트를 칸 정중앙보다 아주 살짝 위로 */
+.teacher-footer button{
+  font-size:clamp(12.8px,.98vw,14.8px)!important;
+  line-height:1.02!important;
+}
+#copyStudentLinkBtn{top:9%!important;transform:translateY(-1.2px)!important}
+#closeRoomBtn{top:56%!important;transform:translateY(-2.0px)!important}
+
+
+
+/* V13 TABLEFIT — rebuild ranking columns to match the four printed table sections */
+.teacher-table-wrap{
+  left:3.80%!important;
+  top:9.95%!important;
+  width:92.50%!important;
+  height:86.90%!important;
+  overflow:hidden!important;
+}
+#resultTable{
+  display:block!important;
+  width:100%!important;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  table-layout:auto!important;
+  background:transparent!important;
+}
+#resultTable thead,#resultTable tbody{display:block!important;width:100%!important}
+#resultTable thead tr,#resultTable tbody tr{
+  display:grid!important;
+  grid-template-columns:7.5% 7.9% 25.6% 24.6% 34.4%!important;
+  width:100%!important;
+  align-items:center!important;
+}
+#resultTable thead tr{height:2.34vw!important}
+#resultTable tbody tr{height:2.28vw!important}
+#resultTable th,#resultTable td{
+  width:auto!important;
+  min-width:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+  transform:none!important;
+  text-align:center!important;
+}
+#resultTable th{font-size:clamp(10px,.80vw,12.4px)!important;font-weight:900!important;color:#746961!important}
+#resultTable td{font-size:clamp(11px,.88vw,13.6px)!important;color:#4c443f!important}
+#resultTable th:nth-child(1),#resultTable td:nth-child(1){text-align:center!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){text-align:left!important;padding-left:.22vw!important}
+#resultTable th:nth-child(3),#resultTable td:nth-child(3){text-align:center!important}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){text-align:center!important}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){text-align:center!important}
+#resultTable td.rank{font-weight:900!important;color:#ef7680!important}
+
+/* Top mint activity-code pill: move actions decisively LEFT inside the pill */
+.teacher-room-control{
+  left:53.25%!important;
+  top:14.10%!important;
+  width:17.20%!important;
+  height:6.35%!important;
+  display:block!important;
+  padding:0!important;
+}
+.teacher-room-control input{
+  position:absolute!important;
+  left:1.0%!important;
+  top:13%!important;
+  width:49.0%!important;
+  height:74%!important;
+  text-align:center!important;
+  font-size:clamp(17px,1.36vw,20.5px)!important;
+  font-weight:900!important;
+  letter-spacing:.07em!important;
+}
+#openRoomBtn{
+  position:absolute!important;
+  left:51.0%!important;
+  top:28%!important;
+  width:13.0%!important;
+  height:44%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:clamp(12px,.94vw,14.3px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+  padding:0!important;
+  white-space:nowrap!important;
+  color:#627d6d!important;
+}
+#newRoomBtn.teacher-new-room{
+  position:absolute!important;
+  left:64.0%!important;
+  top:28%!important;
+  width:31.0%!important;
+  height:44%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:clamp(11.5px,.91vw,13.8px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+  padding:0!important;
+  white-space:nowrap!important;
+  color:#dc727e!important;
+}
+#newRoomBtn.teacher-new-room::before{content:'+ ';color:#ef7882}
+
+
+
+/* V14 TABLELOCK — make each table cell fill its calibrated grid track */
+#resultTable th,#resultTable td{
+  display:flex!important;
+  width:100%!important;
+  height:100%!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){
+  justify-content:center!important;
+  padding-left:0!important;
+}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){
+  justify-content:center!important;
+}
+/* pull the top actions a final touch left while preserving spacing */
+#openRoomBtn{left:49.5%!important}
+#newRoomBtn.teacher-new-room{left:62.5%!important;width:31.5%!important}
+
+
+
+/* V15 TABLESNAP — absolute cell geometry matched to the printed lines */
+#resultTable thead tr,#resultTable tbody tr{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+}
+#resultTable thead tr{height:2.34vw!important}
+#resultTable tbody tr{height:2.28vw!important}
+#resultTable th,#resultTable td{
+  position:absolute!important;
+  top:0!important;
+  bottom:0!important;
+  height:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  transform:none!important;
+  overflow:visible!important;
+}
+#resultTable th:nth-child(1),#resultTable td:nth-child(1){left:0%!important;width:7.5%!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){left:7.5%!important;width:7.9%!important}
+#resultTable th:nth-child(3),#resultTable td:nth-child(3){left:15.4%!important;width:25.6%!important}
+#resultTable th:nth-child(4),#resultTable td:nth-child(4){left:41.0%!important;width:24.6%!important}
+#resultTable th:nth-child(5),#resultTable td:nth-child(5){left:65.6%!important;width:34.4%!important}
+#resultTable th:nth-child(2),#resultTable td:nth-child(2){justify-content:center!important;padding:0!important}
+
+
+
+/* V16 DYNAMIC GAUGE — page 2 only */
+.gauge-overlay{position:absolute;inset:0;z-index:2;pointer-events:none}
+.gauge-overlay svg{width:100%;height:100%;display:block;overflow:visible}
+
+.gauge-cover{display:none}
+.gauge-cover-inner{display:none}
+.gauge-base-arc{display:none}
+.gauge-outline{fill:none;stroke:#4c4640;stroke-linecap:round;stroke-linejoin:round}
+.gauge-outline.outer{display:none}
+.gauge-outline.inner{display:none}
+.gauge-segment{display:none}
+.gauge-active-arc{fill:none;stroke:url(#gaugeGradient);stroke-width:92;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 0 rgba(88,73,60,.10));transition:stroke-dasharray .06s linear}
+.gauge-tick{display:none}
+.gauge-tick.minor{display:none}
+.gauge-tick.major{display:none}
+.gauge-pointer-shadow{fill:rgba(88,73,60,.12)}
+.gauge-pointer-outline{fill:#fff8f5;stroke:#554c46;stroke-width:8;stroke-linejoin:round}
+.gauge-pointer-fill{fill:#ff8da5;opacity:.95}
+.gauge-label{display:none}
+#gaugePointer{display:none}
+.dynamic-score{z-index:5}
+.dynamic-score span{transition:color .08s linear}
+
 </style>
 </head>
 <body>
@@ -280,6 +845,33 @@ body.teacher-mode{
 
     <section id="gameScreen" class="student-screen hidden">
       <img class="plate" src="assets/02_game.png" alt="파스텔 손그림 게임 화면">
+      <div class="gauge-overlay" aria-hidden="true">
+        <svg id="gameGaugeSvg" viewBox="0 0 941 1672" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gaugeGradient" x1="140" y1="745" x2="795" y2="745" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="rgb(104,159,255)"></stop>
+              <stop offset="22%" stop-color="rgb(95,210,239)"></stop>
+              <stop offset="42%" stop-color="rgb(104,223,181)"></stop>
+              <stop offset="60%" stop-color="rgb(213,223,102)"></stop>
+              <stop offset="80%" stop-color="rgb(255,186,96)"></stop>
+              <stop offset="100%" stop-color="rgb(255,125,170)"></stop>
+            </linearGradient>
+          </defs>
+          <circle id="gaugeCoverCircle" class="gauge-cover" cx="467" cy="742" r="325"></circle>
+          <circle id="gaugeCoverInner" class="gauge-cover-inner" cx="467" cy="742" r="278"></circle>
+          <path id="gaugeBaseArc" class="gauge-base-arc"></path>
+          <path id="gaugeOuterArc" class="gauge-outline outer"></path>
+          <path id="gaugeInnerArc" class="gauge-outline inner"></path>
+          <g id="gaugeSegments"></g>
+          <g id="gaugeTicks"></g>
+          <g id="gaugeLabels"></g>
+          <g id="gaugePointer">
+            <circle class="gauge-pointer-shadow" cx="0" cy="0" r="36"></circle>
+            <path class="gauge-pointer-outline" d="M -46 0 L 24 -34 L 24 34 Z"></path>
+            <path class="gauge-pointer-fill" d="M -30 0 L 13 -19 L 13 19 Z"></path>
+          </g>
+        </svg>
+      </div>
       <div class="game-round-title"><span id="roundNow">1</span>라운드</div>
       <div class="game-name" id="gameName">참가자</div>
       <div id="numberBox" class="dynamic-score" aria-label="현재 점수"><span id="scoreNumber">0</span><small>점</small></div>
@@ -330,8 +922,8 @@ body.teacher-mode{
       <div class="teacher-room-control" aria-label="활동 코드 열기">
         <input id="teacherRoomCode" type="text" inputmode="numeric" maxlength="6" placeholder="583214" aria-label="활동 코드">
         <button id="openRoomBtn" type="button">열기</button>
+        <button id="newRoomBtn" class="teacher-new-room" type="button">새 활동</button>
       </div>
-      <button id="newRoomBtn" class="teacher-new-room" type="button">새 활동</button>
 
       <div class="teacher-stats">
         <div class="stat"><span>참여 인원</span><strong id="statCount">0</strong></div>
@@ -489,6 +1081,144 @@ body.teacher-mode{
     let studentShareUrl = "";
     let teacherUser = null;
 
+
+    const gaugeSegmentsWrap = document.getElementById("gaugeSegments");
+    const gaugeTicksWrap = document.getElementById("gaugeTicks");
+    const gaugePointer = document.getElementById("gaugePointer");
+        const gaugeBaseArc = document.getElementById("gaugeBaseArc");
+    const gaugeOuterArc = document.getElementById("gaugeOuterArc");
+    const gaugeInnerArc = document.getElementById("gaugeInnerArc");
+    const gaugeLabelsWrap = document.getElementById("gaugeLabels");
+    const GAUGE_CFG = {
+      cx: 500,
+      cy: 500,
+      start: 135,
+      sweep: 270,
+      baseRadius: 325,
+      outerRadius: 360,
+      innerRadius: 285,
+      pointerRadius: 366,
+      minorTickInner: 294,
+      minorTickOuter: 352,
+      majorTickInner: 286,
+      majorTickOuter: 364,
+      labelRadius: 392
+    };
+    let gaugeBuilt = false;
+    let gaugeSegments = [];
+    let lastGaugeValue = -1;
+
+    function polarPoint(cx, cy, radius, angleDeg) {
+      const rad = angleDeg * Math.PI / 180;
+      return {
+        x: cx + radius * Math.cos(rad),
+        y: cy + radius * Math.sin(rad)
+      };
+    }
+
+    function describeArc(cx, cy, radius, startAngle, endAngle) {
+      const start = polarPoint(cx, cy, radius, startAngle);
+      const end = polarPoint(cx, cy, radius, endAngle);
+      const largeArcFlag = Math.abs(endAngle - startAngle) > 180 ? 1 : 0;
+      const sweepFlag = endAngle >= startAngle ? 1 : 0;
+      return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x.toFixed(2)} ${end.y.toFixed(2)}`;
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function mixColor(c1, c2, t) {
+      const r = Math.round(lerp(c1[0], c2[0], t));
+      const g = Math.round(lerp(c1[1], c2[1], t));
+      const b = Math.round(lerp(c1[2], c2[2], t));
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function gaugeColor(value) {
+      const stops = [
+        [0, [100, 155, 255]],
+        [18, [92, 210, 238]],
+        [36, [99, 221, 178]],
+        [56, [213, 222, 92]],
+        [76, [255, 184, 95]],
+        [100, [255, 124, 170]]
+      ];
+      if (value <= stops[0][0]) return `rgb(${stops[0][1].join(",")})`;
+      for (let i = 0; i < stops.length - 1; i += 1) {
+        const [v1, c1] = stops[i];
+        const [v2, c2] = stops[i + 1];
+        if (value <= v2) return mixColor(c1, c2, (value - v1) / (v2 - v1));
+      }
+      const last = stops[stops.length - 1][1];
+      return `rgb(${last.join(",")})`;
+    }
+
+    function buildGauge() {
+      if (gaugeBuilt || !gaugeSegmentsWrap || !gaugeTicksWrap) return;
+      const endAngle = GAUGE_CFG.start + GAUGE_CFG.sweep;
+      gaugeBaseArc.setAttribute("d", describeArc(GAUGE_CFG.cx, GAUGE_CFG.cy, GAUGE_CFG.baseRadius, GAUGE_CFG.start, endAngle));
+      gaugeOuterArc.setAttribute("d", describeArc(GAUGE_CFG.cx, GAUGE_CFG.cy, GAUGE_CFG.outerRadius, GAUGE_CFG.start, endAngle));
+      gaugeInnerArc.setAttribute("d", describeArc(GAUGE_CFG.cx, GAUGE_CFG.cy, GAUGE_CFG.innerRadius, GAUGE_CFG.start, endAngle));
+
+      for (let i = 0; i <= 100; i += 10) {
+        const angle = GAUGE_CFG.start + GAUGE_CFG.sweep * (i / 100);
+        const isMajor = i % 25 === 0;
+        const innerR = isMajor ? GAUGE_CFG.majorTickInner : GAUGE_CFG.minorTickInner;
+        const outerR = isMajor ? GAUGE_CFG.majorTickOuter : GAUGE_CFG.minorTickOuter;
+        const p1 = polarPoint(GAUGE_CFG.cx, GAUGE_CFG.cy, innerR, angle);
+        const p2 = polarPoint(GAUGE_CFG.cx, GAUGE_CFG.cy, outerR, angle);
+        const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        tick.setAttribute("x1", p1.x.toFixed(2));
+        tick.setAttribute("y1", p1.y.toFixed(2));
+        tick.setAttribute("x2", p2.x.toFixed(2));
+        tick.setAttribute("y2", p2.y.toFixed(2));
+        tick.setAttribute("class", `gauge-tick ${isMajor ? "major" : "minor"}`);
+        gaugeTicksWrap.appendChild(tick);
+      }
+      [0,25,50,75,100].forEach((value) => {
+        const angle = GAUGE_CFG.start + GAUGE_CFG.sweep * (value / 100);
+        const p = polarPoint(GAUGE_CFG.cx, GAUGE_CFG.cy, GAUGE_CFG.labelRadius, angle);
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", p.x.toFixed(2));
+        text.setAttribute("y", (p.y + 14).toFixed(2));
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("class", "gauge-label");
+        text.textContent = String(value);
+        gaugeLabelsWrap.appendChild(text);
+      });
+
+      for (let i = 0; i < 100; i += 1) {
+        const start = GAUGE_CFG.start + GAUGE_CFG.sweep * (i / 100) + 0.45;
+        const end = GAUGE_CFG.start + GAUGE_CFG.sweep * ((i + 1) / 100) - 0.45;
+        const seg = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        seg.setAttribute("d", describeArc(GAUGE_CFG.cx, GAUGE_CFG.cy, GAUGE_CFG.baseRadius, start, end));
+        seg.setAttribute("class", "gauge-segment");
+        seg.setAttribute("stroke", gaugeColor(i + 1));
+        gaugeSegmentsWrap.appendChild(seg);
+        gaugeSegments.push(seg);
+      }
+
+      gaugeBuilt = true;
+      updateGauge(0);
+    }
+
+    function updateGauge(score) {
+      buildGauge();
+      const value = Math.max(0, Math.min(100, Math.round(score)));
+      if (value === lastGaugeValue) return;
+      gaugeSegments.forEach((seg, idx) => {
+        seg.style.opacity = idx < value ? "1" : "0";
+      });
+      const angle = GAUGE_CFG.start + GAUGE_CFG.sweep * (value / 100);
+      const p = polarPoint(GAUGE_CFG.cx, GAUGE_CFG.cy, GAUGE_CFG.pointerRadius, angle);
+      if (gaugePointer) gaugePointer.setAttribute("transform", `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(2)})`);
+      scoreNumber.style.color = gaugeColor(value);
+      lastGaugeValue = value;
+    }
+
+    buildGauge();
+
     function sanitizeRoom(value) {
       return String(value || "")
         .trim()
@@ -571,6 +1301,7 @@ body.teacher-mode{
       mini.forEach(el => el.textContent = "-");
       scoreNumber.textContent = "0";
       meterFill.style.width = "0%";
+      updateGauge(0);
       stopBtn.disabled = false;
       stopBtn.textContent = "멈추기!";
       sendBtn.disabled = false;
@@ -605,6 +1336,7 @@ body.teacher-mode{
       speed = 0.075 + Math.random() * 0.035 + (round - 1) * 0.014;
       scoreNumber.textContent = Math.round(currentScore);
       meterFill.style.width = `${currentScore}%`;
+      updateGauge(currentScore);
       stopBtn.disabled = true;
       stopBtn.textContent = "준비";
 
@@ -634,6 +1366,7 @@ body.teacher-mode{
       const displayScore = Math.round(currentScore);
       scoreNumber.textContent = displayScore;
       meterFill.style.width = `${displayScore}%`;
+      updateGauge(displayScore);
       animationId = requestAnimationFrame(tick);
     }
 
@@ -648,6 +1381,7 @@ body.teacher-mode{
       mini[round - 1].textContent = score;
       scoreNumber.textContent = score;
       meterFill.style.width = `${score}%`;
+      updateGauge(score);
 
       if (score >= 95) showToast("거의 100점!");
       else if (score >= 80) showToast("좋은 기록!");
@@ -1157,5 +1891,79 @@ body.teacher-mode{
     updateRoomCodeVisual(roomCodeInput.value);
     initMode();
   </script>
+
+<script>
+(function(){
+  function ready(fn){ if(document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded", fn); }
+  ready(function(){
+    const gaugeSegmentsWrap = document.getElementById("gaugeSegments");
+    const scoreNumber = document.getElementById("scoreNumber");
+    if(!gaugeSegmentsWrap || !scoreNumber) return;
+    const gaugeBaseArc = document.getElementById("gaugeBaseArc");
+    const gaugeOuterArc = document.getElementById("gaugeOuterArc");
+    const gaugeInnerArc = document.getElementById("gaugeInnerArc");
+    const gaugeTicksWrap = document.getElementById("gaugeTicks");
+    const gaugeLabelsWrap = document.getElementById("gaugeLabels");
+    if(gaugeTicksWrap) gaugeTicksWrap.innerHTML = "";
+    if(gaugeLabelsWrap) gaugeLabelsWrap.innerHTML = "";
+
+    const CFG = { cx: 467, cy: 742, r: 304, start: 135, sweep: 270 };
+
+    function pt(angleDeg){
+      const rad = angleDeg * Math.PI / 180;
+      return { x: CFG.cx + CFG.r * Math.cos(rad), y: CFG.cy + CFG.r * Math.sin(rad) };
+    }
+    function arc(a1, a2){
+      const s = pt(a1), e = pt(a2);
+      const large = Math.abs(a2-a1) > 180 ? 1 : 0;
+      const sweep = a2 >= a1 ? 1 : 0;
+      return `M ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${CFG.r} ${CFG.r} 0 ${large} ${sweep} ${e.x.toFixed(2)} ${e.y.toFixed(2)}`;
+    }
+    function lerp(a,b,t){ return a+(b-a)*t; }
+    function mix(c1,c2,t){ const r=Math.round(lerp(c1[0],c2[0],t)); const g=Math.round(lerp(c1[1],c2[1],t)); const b=Math.round(lerp(c1[2],c2[2],t)); return `rgb(${r}, ${g}, ${b})`; }
+    function color(v){
+      const stops=[[0,[104,159,255]],[18,[95,210,239]],[36,[104,223,181]],[56,[213,223,102]],[76,[255,186,96]],[100,[255,125,170]]];
+      if(v<=0) return 'rgb(104,159,255)';
+      for(let i=0;i<stops.length-1;i++){
+        const [v1,c1]=stops[i], [v2,c2]=stops[i+1];
+        if(v<=v2) return mix(c1,c2,(v-v1)/(v2-v1));
+      }
+      return 'rgb(255,125,170)';
+    }
+
+    if(gaugeBaseArc) gaugeBaseArc.setAttribute('d', '');
+    if(gaugeOuterArc) gaugeOuterArc.setAttribute('d', '');
+    if(gaugeInnerArc) gaugeInnerArc.setAttribute('d', '');
+    gaugeSegmentsWrap.innerHTML='';
+
+    const activeArc=document.createElementNS('http://www.w3.org/2000/svg','path');
+    activeArc.setAttribute('d', arc(CFG.start, CFG.start + CFG.sweep));
+    activeArc.setAttribute('class','gauge-active-arc');
+    activeArc.setAttribute('pathLength','100');
+    activeArc.setAttribute('stroke-dasharray','0 100');
+    activeArc.setAttribute('stroke-width','64');
+    activeArc.setAttribute('fill','none');
+    activeArc.setAttribute('stroke-linecap','round');
+    activeArc.setAttribute('stroke-linejoin','round');
+    gaugeSegmentsWrap.appendChild(activeArc);
+
+    function apply(v){
+      const value=Math.max(0,Math.min(100, Math.round(v)||0));
+      activeArc.setAttribute('stroke-dasharray', `${value} 100`);
+      scoreNumber.style.color = color(value);
+    }
+    function read(){ const m=(scoreNumber.textContent||'').match(/\d+/); return m? parseInt(m[0],10):0; }
+    let last=-1;
+    const tick=()=>{
+      const v=read();
+      if(v!==last){ last=v; apply(v); }
+      requestAnimationFrame(tick);
+    };
+    apply(read());
+    tick();
+  });
+})();
+</script>
+
 </body>
 </html>
