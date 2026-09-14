@@ -1,0 +1,32 @@
+name: Apply ChatGPT index upload
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.chatgpt_upload/READY'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild and verify index
+        shell: bash
+        run: |
+          cat .chatgpt_upload/part*.b64 | base64 -d > index.html
+          ACTUAL="$(git hash-object index.html)"
+          EXPECTED="6d78818b27fdc2c0cee9ac501e076047cb3529ad"
+          echo "actual=$ACTUAL"
+          echo "expected=$EXPECTED"
+          test "$ACTUAL" = "$EXPECTED"
+      - name: Commit uploaded index
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf .chatgpt_upload
+          git add index.html .chatgpt_upload
+          git commit -m "Replace index.html with uploaded version"
+          git push
