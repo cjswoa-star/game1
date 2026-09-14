@@ -1,0 +1,10 @@
+name: ChatGPT upload permission test
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
