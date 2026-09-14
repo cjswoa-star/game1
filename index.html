@@ -1069,6 +1069,32 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 .dist-label{transform:translateY(18px)!important}
 #copyStudentLinkBtn{top:15%!important;height:31%!important;transform:none!important}
 #closeRoomBtn{top:65%!important;height:22%!important;transform:none!important}
+
+
+/* =========================================================
+   V29 FINAL — ranking scroll + final-result micro fit
+   ========================================================= */
+/* Teacher ranking: keep current fit but allow internal vertical scrolling for many students */
+.teacher-table-wrap{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-gutter:stable both-edges!important;
+  padding-right:.2%!important;
+}
+.teacher-table-wrap::-webkit-scrollbar{width:10px;height:10px}
+.teacher-table-wrap::-webkit-scrollbar-thumb{background:rgba(126,188,167,.95);border-radius:999px;border:2px solid rgba(255,251,241,.98)}
+.teacher-table-wrap::-webkit-scrollbar-track{background:rgba(255,246,232,.92);border-radius:999px}
+/* show slightly more rows while preserving readability */
+#resultTable thead tr{height:clamp(32px,2.35vw,37px)!important}
+#resultTable tbody tr{height:clamp(30px,2.10vw,34px)!important}
+#resultTable th{font-size:clamp(9.8px,.72vw,11.7px)!important}
+#resultTable td{font-size:clamp(10.6px,.78vw,12.8px)!important}
+
+/* Final result page: round-score chips slightly left, button labels slightly higher */
+.result-score-row{left:38.3%!important;width:28.6%!important}
+.send-button{transform:translateY(-4.6px)!important}
+.again-button{transform:translateY(-3.6px)!important}
+
 </style>
 </head>
 <body>
