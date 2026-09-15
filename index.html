@@ -1095,6 +1095,45 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 .send-button{transform:translateY(-4.6px)!important}
 .again-button{transform:translateY(-3.6px)!important}
 
+
+
+/* =========================================================
+   V30 QR SHARE — teacher dashboard share panel
+   QR image is overlaid by HTML/CSS. No background asset edit.
+   ========================================================= */
+.teacher-share-panel{left:74.15%!important;top:66.85%!important;width:24.15%!important;height:20.55%!important}
+.share-box{
+  left:6.0%!important;top:4.5%!important;width:89.0%!important;height:42.5%!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:4.5%!important;
+  text-align:left!important;padding:0!important
+}
+.share-text{
+  flex:1 1 auto!important;min-width:0!important;color:#66777c!important;
+  font-size:clamp(9.0px,.68vw,11px)!important;line-height:1.18!important;word-break:break-all!important
+}
+.share-text strong{display:inline-block!important;margin-bottom:2px!important;color:#5d7176!important}
+.teacher-qr-box{
+  flex:0 0 33%!important;height:100%!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:2px!important
+}
+.teacher-qr-image,.teacher-qr-placeholder{
+  width:clamp(56px,4.9vw,78px)!important;height:clamp(56px,4.9vw,78px)!important;border-radius:10px!important;
+  background:#fff!important;box-shadow:0 2px 8px rgba(85,120,120,.10)!important;border:1px solid rgba(137,171,174,.35)!important
+}
+.teacher-qr-image{object-fit:contain!important;display:block!important}
+.teacher-qr-placeholder{
+  display:flex!important;align-items:center!important;justify-content:center!important;color:#90a6aa!important;
+  font-size:clamp(12px,.95vw,14px)!important;font-weight:900!important
+}
+.teacher-qr-caption{font-size:clamp(8px,.62vw,10px)!important;font-weight:900!important;color:#88a0a5!important;line-height:1!important}
+.teacher-room-badge{left:6.0%!important;top:52.0%!important;width:33.0%!important;height:40.5%!important;transform:none!important}
+.teacher-room-badge span{font-size:clamp(10px,.74vw,11.5px)!important}
+.teacher-room-badge strong{font-size:clamp(18px,1.34vw,21px)!important}
+.teacher-footer{left:43.0%!important;top:51.5%!important;width:52.5%!important;height:40.5%!important;display:block!important}
+.teacher-footer button{font-size:clamp(11.7px,.86vw,13.8px)!important}
+#copyStudentLinkBtn{top:12%!important;height:29%!important;transform:none!important}
+#closeRoomBtn{top:62%!important;height:24%!important;transform:none!important}
+
 </style>
 </head>
 <body>
@@ -1230,7 +1269,14 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       </div>
 
       <div class="teacher-share-panel">
-        <div id="shareBox" class="share-box"><strong>학생용 주소</strong><br>활동을 열면 링크가 표시됩니다.</div>
+        <div id="shareBox" class="share-box">
+          <div id="shareText" class="share-text"><strong>학생용 주소</strong><br>활동을 열면 링크가 표시됩니다.</div>
+          <div class="teacher-qr-box" aria-label="학생 접속 QR">
+            <img id="teacherQrImage" class="teacher-qr-image hidden" alt="학생 접속 QR 코드">
+            <div id="teacherQrPlaceholder" class="teacher-qr-placeholder">QR</div>
+            <div id="teacherQrCaption" class="teacher-qr-caption">활동 대기</div>
+          </div>
+        </div>
         <div class="teacher-room-badge"><span>활동 코드</span><strong id="teacherRoomBadge">------</strong></div>
         <div class="teacher-footer">
           <button id="copyStudentLinkBtn" class="secondary" type="button">학생용 주소 복사</button>
@@ -1324,6 +1370,10 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     const copyStudentLinkBtn = document.getElementById("copyStudentLinkBtn");
     const closeRoomBtn = document.getElementById("closeRoomBtn");
     const shareBox = document.getElementById("shareBox");
+    const shareText = document.getElementById("shareText");
+    const teacherQrImage = document.getElementById("teacherQrImage");
+    const teacherQrPlaceholder = document.getElementById("teacherQrPlaceholder");
+    const teacherQrCaption = document.getElementById("teacherQrCaption");
     const connectionState = document.getElementById("connectionState");
     const statCount = document.getElementById("statCount");
     const statAvg = document.getElementById("statAvg");
@@ -1351,6 +1401,17 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     let currentTeacherRoom = "";
     let stopTeacherListener = null;
     let studentShareUrl = "";
+
+    if (teacherQrImage) {
+      teacherQrImage.addEventListener("error", () => {
+        teacherQrImage.classList.add("hidden");
+        teacherQrPlaceholder.classList.remove("hidden");
+        teacherQrCaption.textContent = "QR 불러오기 실패";
+      });
+      teacherQrImage.addEventListener("load", () => {
+        teacherQrPlaceholder.classList.add("hidden");
+      });
+    }
     let teacherUser = null;
 
 
@@ -1510,6 +1571,27 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       });
     }
 
+
+    function buildQrImageUrl(value) {
+      return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&ecc=M&data=${encodeURIComponent(value)}`;
+    }
+
+    function updateTeacherShareUi(url) {
+      if (!shareText || !teacherQrImage || !teacherQrPlaceholder || !teacherQrCaption) return;
+      if (!url) {
+        shareText.innerHTML = `<strong>학생용 주소</strong><br>활동을 열면 링크가 표시됩니다.`;
+        teacherQrImage.removeAttribute("src");
+        teacherQrImage.classList.add("hidden");
+        teacherQrPlaceholder.classList.remove("hidden");
+        teacherQrCaption.textContent = "활동 대기";
+        return;
+      }
+      shareText.innerHTML = `<strong>학생용 주소</strong><br>${escapeHtml(url)}`;
+      teacherQrImage.src = buildQrImageUrl(url);
+      teacherQrImage.classList.remove("hidden");
+      teacherQrPlaceholder.classList.add("hidden");
+      teacherQrCaption.textContent = "QR로 접속";
+    }
     function randomToken() {
       if (crypto.randomUUID) return crypto.randomUUID().replaceAll("-", "");
       const bytes = new Uint8Array(16);
@@ -1960,11 +2042,15 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         const meta = await readRoomMeta(room);
         if (!meta) {
           setConnection("존재하지 않는 활동 코드입니다.", "warn");
+          studentShareUrl = "";
+          updateTeacherShareUi("");
           resetTeacherStats();
           return false;
         }
         if (meta.ownerUid !== user.uid) {
           setConnection("이 브라우저에서 만든 활동이 아니어서 교사 화면을 열 수 없습니다.", "warn");
+          studentShareUrl = "";
+          updateTeacherShareUi("");
           resetTeacherStats();
           return false;
         }
@@ -1985,9 +2071,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         url.searchParams.set("room", room);
         history.replaceState(null, "", url.toString());
 
-        shareBox.innerHTML =
-          `<strong>학생용 주소</strong><br>` +
-          `${escapeHtml(studentShareUrl)}`;
+        updateTeacherShareUi(studentShareUrl);
 
         setConnection(meta.closed === true
           ? `활동 코드 ${room} · 종료된 활동`
@@ -2161,6 +2245,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     closeRoomBtn.addEventListener("click", closeCurrentRoom);
 
     updateRoomCodeVisual(roomCodeInput.value);
+    updateTeacherShareUi("");
     initMode();
   </script>
 
