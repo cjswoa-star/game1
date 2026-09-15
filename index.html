@@ -1134,6 +1134,38 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 #copyStudentLinkBtn{top:12%!important;height:29%!important;transform:none!important}
 #closeRoomBtn{top:62%!important;height:24%!important;transform:none!important}
 
+
+
+/* =========================================================
+   V31 QR FIX — reliable scanning + click to enlarge
+   ========================================================= */
+.share-box{
+  left:5.5%!important;top:3.5%!important;width:90%!important;height:48%!important;
+  gap:3.5%!important;overflow:visible!important
+}
+.share-text{
+  font-size:clamp(8.6px,.63vw,10.2px)!important;
+  line-height:1.16!important
+}
+.teacher-qr-box{
+  flex:0 0 37%!important;height:100%!important;gap:2px!important;overflow:visible!important
+}
+.teacher-qr-image,.teacher-qr-placeholder{
+  width:clamp(72px,5.8vw,92px)!important;
+  height:clamp(72px,5.8vw,92px)!important;
+  border-radius:2px!important;
+  background:#fff!important;
+  border:5px solid #fff!important;
+  box-shadow:0 2px 8px rgba(85,120,120,.12)!important
+}
+.teacher-qr-image{cursor:pointer!important;object-fit:contain!important;image-rendering:auto!important}
+.teacher-qr-image:hover{transform:scale(1.025)!important}
+.teacher-qr-caption{font-size:clamp(7.8px,.57vw,9.2px)!important;white-space:nowrap!important}
+.teacher-room-badge{left:6%!important;top:55%!important;width:33%!important;height:36%!important;transform:none!important}
+.teacher-footer{left:43%!important;top:54%!important;width:52.5%!important;height:38%!important;display:block!important}
+#copyStudentLinkBtn{top:8%!important;height:32%!important;transform:none!important}
+#closeRoomBtn{top:64%!important;height:24%!important;transform:none!important}
+
 </style>
 </head>
 <body>
@@ -1411,6 +1443,14 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       teacherQrImage.addEventListener("load", () => {
         teacherQrPlaceholder.classList.add("hidden");
       });
+      teacherQrImage.addEventListener("click", () => {
+        const target = teacherQrImage.dataset.targetUrl || studentShareUrl;
+        if (!target) {
+          showToast("먼저 활동을 열어 주세요.");
+          return;
+        }
+        window.open(buildQrImageUrl(target, 1000), "_blank", "noopener,noreferrer");
+      });
     }
     let teacherUser = null;
 
@@ -1572,8 +1612,8 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     }
 
 
-    function buildQrImageUrl(value) {
-      return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&ecc=M&data=${encodeURIComponent(value)}`;
+    function buildQrImageUrl(value, size = 600) {
+      return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=24&ecc=H&data=${encodeURIComponent(value)}`;
     }
 
     function updateTeacherShareUi(url) {
@@ -1587,10 +1627,12 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         return;
       }
       shareText.innerHTML = `<strong>학생용 주소</strong><br>${escapeHtml(url)}`;
-      teacherQrImage.src = buildQrImageUrl(url);
+      teacherQrImage.src = buildQrImageUrl(url, 600);
+      teacherQrImage.dataset.targetUrl = url;
+      teacherQrImage.title = "클릭하면 QR 코드를 크게 엽니다";
       teacherQrImage.classList.remove("hidden");
       teacherQrPlaceholder.classList.add("hidden");
-      teacherQrCaption.textContent = "QR로 접속";
+      teacherQrCaption.textContent = "클릭하면 크게 보기";
     }
     function randomToken() {
       if (crypto.randomUUID) return crypto.randomUUID().replaceAll("-", "");
