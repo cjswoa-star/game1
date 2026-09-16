@@ -1166,6 +1166,280 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 #copyStudentLinkBtn{top:8%!important;height:32%!important;transform:none!important}
 #closeRoomBtn{top:64%!important;height:24%!important;transform:none!important}
 
+
+
+/* =========================================================
+   V32 FINAL — QR in activity-code box + right-side re-alignment
+   ========================================================= */
+.teacher-share-panel{
+  left:74.15%!important;top:66.95%!important;width:24.10%!important;height:20.45%!important;
+}
+.share-box{
+  position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;
+  display:block!important;padding:0!important;overflow:visible!important
+}
+.share-text{
+  position:absolute!important;left:43.5%!important;top:4.0%!important;width:52.0%!important;height:25.0%!important;
+  display:block!important;color:#66777c!important;text-align:left!important;
+  font-size:clamp(8.8px,.64vw,10.4px)!important;line-height:1.16!important;word-break:break-all!important;
+}
+.share-text strong{
+  display:inline-block!important;margin:0 0 1px 0!important;color:#5d7176!important;
+  font-size:clamp(9.8px,.71vw,11.5px)!important
+}
+.teacher-qr-box{
+  position:absolute!important;left:6.2%!important;top:5.5%!important;width:33.2%!important;height:58.0%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  overflow:visible!important
+}
+.teacher-qr-image,.teacher-qr-placeholder{
+  width:min(92%,92px)!important;height:auto!important;aspect-ratio:1/1!important;
+  border-radius:2px!important;background:#fff!important;border:5px solid #fff!important;
+  box-shadow:0 2px 7px rgba(85,120,120,.11)!important
+}
+.teacher-qr-image{cursor:pointer!important;object-fit:contain!important;image-rendering:auto!important}
+.teacher-qr-image:hover{transform:scale(1.025)!important}
+.teacher-qr-placeholder{
+  display:flex!important;align-items:center!important;justify-content:center!important;color:#90a6aa!important;
+  font-size:clamp(12px,.95vw,14px)!important;font-weight:900!important
+}
+.teacher-qr-caption{display:none!important}
+.teacher-room-badge{
+  left:5.5%!important;top:63.0%!important;width:35.0%!important;height:31.5%!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  transform:none!important;text-align:center!important
+}
+.teacher-room-badge span{
+  font-size:clamp(8.7px,.64vw,10.2px)!important;font-weight:900!important;line-height:1!important;margin:0 0 .16em!important
+}
+.teacher-room-badge strong{
+  font-size:clamp(17px,1.25vw,20.5px)!important;font-weight:900!important;letter-spacing:.025em!important;
+  line-height:1!important;margin:0!important;color:#55666b!important
+}
+.teacher-footer{
+  left:43.0%!important;top:30.5%!important;width:53.0%!important;height:64.0%!important;
+  display:block!important;margin:0!important
+}
+.teacher-footer button{
+  position:absolute!important;left:0!important;width:100%!important;display:flex!important;align-items:center!important;
+  justify-content:center!important;padding:0!important;line-height:1!important;white-space:nowrap!important;
+  font-size:clamp(12.2px,.89vw,14.2px)!important;font-weight:900!important
+}
+#copyStudentLinkBtn{top:3.0%!important;height:38.0%!important;transform:none!important}
+#closeRoomBtn{top:58.0%!important;height:28.0%!important;transform:none!important}
+
+
+
+/* =========================================================
+   V33 PIXEL FIT — QR share panel matched to the approved layout
+   Background artwork unchanged; HTML/CSS overlays only.
+   ========================================================= */
+.teacher-share-panel{
+  left:74.72%!important;
+  top:65.35%!important;
+  width:23.55%!important;
+  height:20.55%!important;
+}
+.teacher-share-panel .share-box{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:visible!important;
+  display:block!important;
+}
+/* address sits in the narrow header strip, fully clear of the buttons */
+.teacher-share-panel .share-text{
+  position:absolute!important;
+  left:44.8%!important;
+  top:1.8%!important;
+  width:50.5%!important;
+  height:25.0%!important;
+  margin:0!important;
+  padding:0!important;
+  color:#536d77!important;
+  text-align:left!important;
+  font-size:clamp(8.8px,.63vw,10.2px)!important;
+  line-height:1.16!important;
+  letter-spacing:-.025em!important;
+  word-break:break-all!important;
+  overflow:hidden!important;
+}
+.teacher-share-panel .share-text strong{
+  display:block!important;
+  margin:0 0 2px 0!important;
+  color:#385f72!important;
+  font-size:clamp(10.2px,.74vw,11.8px)!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:-.03em!important;
+}
+/* QR is now entirely inside the left dashed activity-code card */
+.teacher-share-panel .teacher-qr-box{
+  position:absolute!important;
+  left:7.0%!important;
+  top:30.8%!important;
+  width:31.0%!important;
+  height:43.5%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+.teacher-share-panel .teacher-qr-image,
+.teacher-share-panel .teacher-qr-placeholder{
+  width:min(100%,88px)!important;
+  height:auto!important;
+  aspect-ratio:1/1!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  border:4px solid #fff!important;
+  border-radius:3px!important;
+  background:#fff!important;
+  box-shadow:0 2px 6px rgba(62,97,104,.10)!important;
+}
+.teacher-share-panel .teacher-qr-image{
+  display:block!important;
+  object-fit:contain!important;
+  cursor:pointer!important;
+  image-rendering:auto!important;
+}
+.teacher-share-panel .teacher-qr-image:hover{transform:scale(1.02)!important}
+/* V33 critical: QR placeholder and image must obey the hidden state. Earlier QR rules used !important display values. */
+.teacher-share-panel .teacher-qr-image.hidden,
+.teacher-share-panel .teacher-qr-placeholder.hidden{display:none!important}
+.teacher-share-panel .teacher-qr-placeholder{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  color:#90a6aa!important;
+  font-size:clamp(12px,.9vw,14px)!important;
+  font-weight:900!important;
+}
+.teacher-share-panel .teacher-qr-caption{display:none!important}
+/* activity code sits directly under QR, in the same dashed card */
+.teacher-share-panel .teacher-room-badge{
+  position:absolute!important;
+  left:6.0%!important;
+  top:74.2%!important;
+  width:33.0%!important;
+  height:20.5%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  transform:none!important;
+  margin:0!important;
+  padding:0!important;
+  pointer-events:none!important;
+}
+.teacher-share-panel .teacher-room-badge span{
+  margin:0 0 3px 0!important;
+  font-size:clamp(8.5px,.61vw,9.9px)!important;
+  line-height:1!important;
+  font-weight:900!important;
+  color:#718b94!important;
+}
+.teacher-share-panel .teacher-room-badge strong{
+  margin:0!important;
+  font-size:clamp(17px,1.28vw,20.8px)!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:.025em!important;
+  color:#48636f!important;
+}
+/* right buttons align exactly with the two blue background cells */
+.teacher-share-panel .teacher-footer{
+  position:absolute!important;
+  left:43.8%!important;
+  top:29.8%!important;
+  width:52.8%!important;
+  height:65.0%!important;
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+}
+.teacher-share-panel .teacher-footer button{
+  position:absolute!important;
+  left:0!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  line-height:1!important;
+  font-size:clamp(12.0px,.88vw,14.2px)!important;
+  font-weight:900!important;
+  letter-spacing:-.035em!important;
+}
+.teacher-share-panel #copyStudentLinkBtn{
+  top:2.0%!important;
+  height:42.0%!important;
+  transform:none!important;
+  color:#238fcb!important;
+}
+.teacher-share-panel #closeRoomBtn{
+  top:61.0%!important;
+  height:26.0%!important;
+  transform:none!important;
+  color:#df626e!important;
+}
+
+
+
+/* =========================================================
+   V34 MICRO ALIGN — move all live content in the share panel
+   down by 18 CSS px after visual QA so the live overlays sit inside the painted cells. Background unchanged.
+   ========================================================= */
+.teacher-share-panel .share-text,
+.teacher-share-panel .teacher-qr-box,
+.teacher-share-panel .teacher-room-badge,
+.teacher-share-panel .teacher-footer{
+  transform:translateY(18px)!important;
+}
+
+
+
+/* =========================================================
+   V36 FINAL MICRO ALIGN — share panel only
+   V35 structure preserved. No assets, QR logic, Firebase, ranking,
+   distribution or top stats changed.
+   ========================================================= */
+/* 1) whole share panel down exactly 5 CSS px */
+.teacher-share-panel{
+  top:calc(65.35% + 5px)!important;
+}
+/* 2) QR + activity-code group an additional 3 px down */
+.teacher-share-panel .teacher-qr-box,
+.teacher-share-panel .teacher-room-badge{
+  transform:translateY(21px)!important; /* V35 18px + 3px */
+}
+/* 3) address block an additional 3 px down */
+.teacher-share-panel .share-text{
+  transform:translateY(21px)!important; /* V35 18px + 3px */
+}
+/* footer retains V35 position after the panel-wide +5px; only text moves */
+.teacher-share-panel .teacher-footer{
+  transform:translateY(18px)!important;
+}
+/* 4) move button text ~1px down without moving the clickable boxes */
+.teacher-share-panel .teacher-footer button{
+  box-sizing:border-box!important;
+  padding-top:2px!important;
+}
+
 </style>
 </head>
 <body>
@@ -1449,7 +1723,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
           showToast("먼저 활동을 열어 주세요.");
           return;
         }
-        window.open(buildQrImageUrl(target, 1000), "_blank", "noopener,noreferrer");
+        window.open(buildQrImageUrl(target, 1200), "_blank", "noopener,noreferrer");
       });
     }
     let teacherUser = null;
@@ -1612,8 +1886,8 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     }
 
 
-    function buildQrImageUrl(value, size = 600) {
-      return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=24&ecc=H&data=${encodeURIComponent(value)}`;
+    function buildQrImageUrl(value, size = 700) {
+      return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=28&ecc=H&data=${encodeURIComponent(value)}`;
     }
 
     function updateTeacherShareUi(url) {
@@ -1627,7 +1901,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         return;
       }
       shareText.innerHTML = `<strong>학생용 주소</strong><br>${escapeHtml(url)}`;
-      teacherQrImage.src = buildQrImageUrl(url, 600);
+      teacherQrImage.src = buildQrImageUrl(url, 700);
       teacherQrImage.dataset.targetUrl = url;
       teacherQrImage.title = "클릭하면 QR 코드를 크게 엽니다";
       teacherQrImage.classList.remove("hidden");
@@ -1966,8 +2240,8 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     }
 
     function getStudentUrl(room) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete("teacher");
+      // 학생용 주소는 추적/교사 파라미터를 모두 제거해 QR을 최대한 단순하게 유지한다.
+      const url = new URL(window.location.origin + window.location.pathname);
       url.searchParams.set("room", room);
       return url.toString();
     }
