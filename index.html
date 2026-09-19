@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#fffaf0">
-<title>100점에 멈춰라! · V22 CLEANARC</title>
+<title>100점에 멈춰라! · V40 RESET FIX</title>
 <style>
 :root{
   --paper:#fffaf0; --ink:#4a443d; --pink:#f47f8e; --mint:#77c7a8; --blue:#67bdeb; --green:#5ebb92; --line:rgba(74,68,61,.18);
@@ -1479,8 +1479,9 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 
 
 /* V39 RESET SAFE — no visual changes; reset logic hardened for Firebase rules */
+/* V40 RESET REOPEN FIX — reopen changes only meta/closed; never clears closedAt */
 </style>
-<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=18566"></script>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=20783"></script>
 </head>
 <body>
   <div id="studentApp" class="student-stage">
@@ -2549,10 +2550,9 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
          * This keeps the room code/QR stable and safely reopens a closed room.
          */
         const resetAt = await estimatedFirebaseServerNow();
-        await update(ref(db, `${DB_ROOT}/rooms/${room}/meta`), {
-          closed: false,
-          closedAt: null
-        });
+        // V40: reopen by changing only the closed flag.
+        // Do NOT delete/clear closedAt: Firebase rules can reject null/deletion on meta fields.
+        await set(ref(db, `${DB_ROOT}/rooms/${room}/meta/closed`), false);
 
         saveTeacherResetAt(room, resetAt);
         resetTeacherStats();
