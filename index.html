@@ -1477,8 +1477,10 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 #resetRoomBtn.teacher-reset-room:disabled,
 #newRoomBtn.teacher-new-room:disabled{opacity:.5!important}
 
+
+/* V39 RESET SAFE — no visual changes; reset logic hardened for Firebase rules */
 </style>
-<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=17528"></script>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=18566"></script>
 </head>
 <body>
   <div id="studentApp" class="student-stage">
@@ -1667,6 +1669,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     const TOTAL_ROUNDS = 3;
     const DB_ROOT = "stopAt100_v2";
     const PARTICIPANT_PREFIX = "stopAt100Participant_v2";
+    const TEACHER_RESET_PREFIX = "stopAt100TeacherReset_v1";
     const ROOM_CODE_LENGTH = 6;
 
     const studentApp = document.getElementById("studentApp");
@@ -1745,6 +1748,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
     let currentFinalScore = 0;
 
     let currentTeacherRoom = "";
+    let currentTeacherResetAt = 0;
     let stopTeacherListener = null;
     let studentShareUrl = "";
 
@@ -2286,6 +2290,36 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       return url.toString();
     }
 
+    function teacherResetStorageKey(room) {
+      return `${TEACHER_RESET_PREFIX}:${room}`;
+    }
+
+    function loadTeacherResetAt(room) {
+      try {
+        const value = Number(localStorage.getItem(teacherResetStorageKey(room)) || 0);
+        return Number.isFinite(value) && value > 0 ? value : 0;
+      } catch (_) {
+        return 0;
+      }
+    }
+
+    function saveTeacherResetAt(room, timestamp) {
+      currentTeacherResetAt = Number(timestamp) || 0;
+      try {
+        localStorage.setItem(teacherResetStorageKey(room), String(currentTeacherResetAt));
+      } catch (_) {}
+    }
+
+    async function estimatedFirebaseServerNow() {
+      try {
+        const snap = await get(ref(db, ".info/serverTimeOffset"));
+        const offset = Number(snap.val() || 0);
+        return Date.now() + (Number.isFinite(offset) ? offset : 0);
+      } catch (_) {
+        return Date.now();
+      }
+    }
+
     function formatTime(timestamp) {
       if (!timestamp || !Number.isFinite(timestamp)) return "-";
       try {
@@ -2314,6 +2348,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
           submittedAt: Number(data?.submittedAt || data?.updatedAtClient || 0)
         }))
         .filter(item => Number.isFinite(item.finalScore) && item.scores.length === TOTAL_ROUNDS)
+        .filter(item => currentTeacherResetAt <= 0 || item.submittedAt > currentTeacherResetAt)
         .sort((a, b) => {
           if (b.finalScore !== a.finalScore) return b.finalScore - a.finalScore;
           return a.submittedAt - b.submittedAt;
@@ -2417,6 +2452,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         }
 
         currentTeacherRoom = room;
+        currentTeacherResetAt = loadTeacherResetAt(room);
         teacherRoomCode.value = room;
         const teacherRoomBadge = document.getElementById("teacherRoomBadge");
         if (teacherRoomBadge) teacherRoomBadge.textContent = room;
@@ -2488,10 +2524,10 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       }
 
       const confirmed = confirm(
-        `활동 코드 ${room}의 모든 학생 결과를 삭제하고 활동을 다시 시작할까요?\n\n` +
+        `활동 코드 ${room}의 현재 결과를 초기화하고 활동을 다시 시작할까요?\n\n` +
         `• 활동 코드는 그대로 유지됩니다.\n` +
         `• 종료된 활동이라면 다시 열립니다.\n` +
-        `• 기존 학생 결과는 복구할 수 없습니다.`
+        `• 초기화 이전 결과는 현황판에서 보이지 않습니다.`
       );
       if (!confirmed) return;
 
@@ -2504,20 +2540,27 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         if (!meta) throw new Error("ROOM_MISSING");
         if (meta.ownerUid !== user.uid) throw new Error("NOT_ROOM_OWNER");
 
-        // One room-level update: delete only player results and reopen the same room.
-        // Existing ownerUid/createdAt and the 6-digit room code are preserved.
-        await update(ref(db, `${DB_ROOT}/rooms/${room}`), {
-          players: null,
-          "meta/closed": false,
-          "meta/closedAt": null
+        /*
+         * V39 safe reset:
+         * Firebase rules used by this game allow the teacher to change room meta
+         * (the same path used by '활동 종료') but may reject deleting the entire
+         * players branch. So reset no longer deletes /players. Instead, it stores
+         * a teacher-side reset cutoff and renders only submissions made after it.
+         * This keeps the room code/QR stable and safely reopens a closed room.
+         */
+        const resetAt = await estimatedFirebaseServerNow();
+        await update(ref(db, `${DB_ROOT}/rooms/${room}/meta`), {
+          closed: false,
+          closedAt: null
         });
 
+        saveTeacherResetAt(room, resetAt);
         resetTeacherStats();
         closeRoomBtn.disabled = false;
         closeRoomBtn.textContent = "활동 종료";
         if (teacherQrCaption) teacherQrCaption.textContent = "클릭하면 크게 보기";
         setConnection(`활동 코드 ${room} · 실시간 결과 수신 중`, "good");
-        showToast("학생 결과를 초기화하고 활동을 다시 열었습니다.");
+        showToast("결과를 초기화하고 활동을 다시 열었습니다.");
       } catch (error) {
         console.error("Room reset error:", error);
         if (String(error?.message || error).includes("NOT_ROOM_OWNER")) {
