@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#fffaf0">
-<title>100점에 멈춰라! · V40 RESET FIX</title>
+<title>100점에 멈춰라! · V41 RESET/REOPEN FINAL</title>
 <style>
 :root{
   --paper:#fffaf0; --ink:#4a443d; --pink:#f47f8e; --mint:#77c7a8; --blue:#67bdeb; --green:#5ebb92; --line:rgba(74,68,61,.18);
@@ -1480,8 +1480,12 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
 
 /* V39 RESET SAFE — no visual changes; reset logic hardened for Firebase rules */
 /* V40 RESET REOPEN FIX — reopen changes only meta/closed; never clears closedAt */
+
+/* V41: closed room can be resumed from the same button */
+.teacher-footer button.resume{color:#4f9f80!important}
+
 </style>
-<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=20783"></script>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=21585"></script>
 </head>
 <body>
   <div id="studentApp" class="student-stage">
@@ -1646,6 +1650,7 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       get,
       onValue,
       update,
+      remove,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
     import {
@@ -2349,7 +2354,6 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
           submittedAt: Number(data?.submittedAt || data?.updatedAtClient || 0)
         }))
         .filter(item => Number.isFinite(item.finalScore) && item.scores.length === TOTAL_ROUNDS)
-        .filter(item => currentTeacherResetAt <= 0 || item.submittedAt > currentTeacherResetAt)
         .sort((a, b) => {
           if (b.finalScore !== a.finalScore) return b.finalScore - a.finalScore;
           return a.submittedAt - b.submittedAt;
@@ -2471,8 +2475,9 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
           : `활동 코드 ${room} · 실시간 결과 수신 중`,
           meta.closed === true ? "warn" : "good"
         );
-        closeRoomBtn.disabled = meta.closed === true;
-        closeRoomBtn.textContent = meta.closed === true ? "활동 종료됨" : "활동 종료";
+        closeRoomBtn.disabled = false;
+        closeRoomBtn.textContent = meta.closed === true ? "활동 재개" : "활동 종료";
+        closeRoomBtn.classList.toggle("resume", meta.closed === true);
 
         const playersRef = ref(db, `${DB_ROOT}/rooms/${room}/players`);
         stopTeacherListener = onValue(
@@ -2525,10 +2530,10 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
       }
 
       const confirmed = confirm(
-        `활동 코드 ${room}의 현재 결과를 초기화하고 활동을 다시 시작할까요?\n\n` +
+        `활동 코드 ${room}의 모든 학생 결과를 삭제하고 새로 시작할까요?\n\n` +
         `• 활동 코드는 그대로 유지됩니다.\n` +
-        `• 종료된 활동이라면 다시 열립니다.\n` +
-        `• 초기화 이전 결과는 현황판에서 보이지 않습니다.`
+        `• 기존 학생 결과는 실제로 삭제되며 복구할 수 없습니다.\n` +
+        `• 종료된 활동이라면 자동으로 다시 열립니다.`
       );
       if (!confirmed) return;
 
@@ -2541,30 +2546,50 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         if (!meta) throw new Error("ROOM_MISSING");
         if (meta.ownerUid !== user.uid) throw new Error("NOT_ROOM_OWNER");
 
-        /*
-         * V39 safe reset:
-         * Firebase rules used by this game allow the teacher to change room meta
-         * (the same path used by '활동 종료') but may reject deleting the entire
-         * players branch. So reset no longer deletes /players. Instead, it stores
-         * a teacher-side reset cutoff and renders only submissions made after it.
-         * This keeps the room code/QR stable and safely reopens a closed room.
-         */
-        const resetAt = await estimatedFirebaseServerNow();
-        // V40: reopen by changing only the closed flag.
-        // Do NOT delete/clear closedAt: Firebase rules can reject null/deletion on meta fields.
+        // V41 robust reset sequence:
+        // 1) temporarily close the room to freeze new submissions
+        // 2) owner deletes each existing player record
+        // 3) reopen the same room code
+        if (meta.closed !== true) {
+          await update(ref(db, `${DB_ROOT}/rooms/${room}/meta`), {
+            closed: true,
+            closedAt: serverTimestamp()
+          });
+        }
+
+        const playersRef = ref(db, `${DB_ROOT}/rooms/${room}/players`);
+        const playersSnap = await get(playersRef);
+        if (playersSnap.exists()) {
+          const playerIds = Object.keys(playersSnap.val() || {});
+          const results = await Promise.allSettled(
+            playerIds.map(playerId => remove(ref(db, `${DB_ROOT}/rooms/${room}/players/${playerId}`)))
+          );
+          const failed = results.filter(result => result.status === "rejected");
+          if (failed.length) {
+            throw new Error(`PLAYER_DELETE_FAILED:${failed.length}`);
+          }
+        }
+
         await set(ref(db, `${DB_ROOT}/rooms/${room}/meta/closed`), false);
 
-        saveTeacherResetAt(room, resetAt);
+        // Legacy browser-local reset cutoff is no longer used in V41.
+        currentTeacherResetAt = 0;
+        try { localStorage.removeItem(teacherResetStorageKey(room)); } catch (_) {}
+
         resetTeacherStats();
         closeRoomBtn.disabled = false;
         closeRoomBtn.textContent = "활동 종료";
+        closeRoomBtn.classList.remove("resume");
         if (teacherQrCaption) teacherQrCaption.textContent = "클릭하면 크게 보기";
         setConnection(`활동 코드 ${room} · 실시간 결과 수신 중`, "good");
-        showToast("결과를 초기화하고 활동을 다시 열었습니다.");
+        showToast("결과를 모두 삭제하고 활동을 다시 시작했습니다.");
       } catch (error) {
         console.error("Room reset error:", error);
         if (String(error?.message || error).includes("NOT_ROOM_OWNER")) {
           showToast("이 브라우저에서 만든 활동만 초기화할 수 있습니다.");
+        } else if (String(error?.message || error).includes("PLAYER_DELETE_FAILED")) {
+          setConnection(`활동 코드 ${room} · 초기화 중 일부 결과 삭제 실패`, "warn");
+          showToast("결과 삭제에 실패했습니다. Firebase 규칙을 확인해 주세요.");
         } else {
           showToast("활동 초기화 실패");
         }
@@ -2579,20 +2604,44 @@ body.teacher-mode{margin:0;padding:0;background:#f4efe5;display:block;overflow-x
         showToast("먼저 내 방을 열어 주세요.");
         return;
       }
-      if (!confirm(`활동 코드 ${currentTeacherRoom}의 제출을 종료할까요?\n기존 결과는 그대로 남습니다.`)) return;
 
+      const room = currentTeacherRoom;
       try {
-        await update(ref(db, `${DB_ROOT}/rooms/${currentTeacherRoom}/meta`), {
+        const user = await ensureTeacherAuth();
+        const meta = await readRoomMeta(room);
+        if (!meta) throw new Error("ROOM_MISSING");
+        if (meta.ownerUid !== user.uid) throw new Error("NOT_ROOM_OWNER");
+
+        if (meta.closed === true) {
+          if (!confirm(`활동 코드 ${room}을 다시 시작할까요?\n기존 결과는 그대로 유지됩니다.`)) return;
+
+          await set(ref(db, `${DB_ROOT}/rooms/${room}/meta/closed`), false);
+          closeRoomBtn.disabled = false;
+          closeRoomBtn.textContent = "활동 종료";
+          closeRoomBtn.classList.remove("resume");
+          setConnection(`활동 코드 ${room} · 실시간 결과 수신 중`, "good");
+          showToast("활동을 다시 열었습니다.");
+          return;
+        }
+
+        if (!confirm(`활동 코드 ${room}의 제출을 종료할까요?\n기존 결과는 그대로 남습니다.\n종료 후 이 버튼을 다시 누르면 재개할 수 있습니다.`)) return;
+
+        await update(ref(db, `${DB_ROOT}/rooms/${room}/meta`), {
           closed: true,
           closedAt: serverTimestamp()
         });
-        closeRoomBtn.disabled = true;
-        closeRoomBtn.textContent = "활동 종료됨";
-        setConnection(`활동 코드 ${currentTeacherRoom} · 종료된 활동`, "warn");
+        closeRoomBtn.disabled = false;
+        closeRoomBtn.textContent = "활동 재개";
+        closeRoomBtn.classList.add("resume");
+        setConnection(`활동 코드 ${room} · 종료된 활동`, "warn");
         showToast("활동을 종료했습니다.");
       } catch (error) {
-        console.error("Room close error:", error);
-        showToast("활동 종료 실패");
+        console.error("Room close/resume error:", error);
+        if (String(error?.message || error).includes("NOT_ROOM_OWNER")) {
+          showToast("이 브라우저에서 만든 활동만 변경할 수 있습니다.");
+        } else {
+          showToast("활동 상태 변경 실패");
+        }
       }
     }
 
